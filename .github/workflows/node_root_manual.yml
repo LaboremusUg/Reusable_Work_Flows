@@ -24,7 +24,6 @@ on:
 jobs:
   Build-Package-IIS_Deploy:
     runs-on: windows-latest
-    environment: 'Production'
     steps:
     - uses: actions/checkout@v2
     - name: Set up Node.js
