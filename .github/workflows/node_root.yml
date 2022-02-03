@@ -1,0 +1,48 @@
+# This is a basic workflow to help you get started with Actions
+
+name: NODE_CI/CD_ROOT_WORKFLOW
+
+on:
+  workflow_call:
+    inputs:
+      ENVIRONMENT:
+        type: string
+      SITE_NAME:
+        type: string
+      COMPUTER_NAME:
+        type: string
+      WEBDEPLOY_USERNAME:
+        type: string
+      WEBDEPLOY_PASSWORD:
+        type: string
+      IIS_SITE_NAME:
+        type: string
+        
+
+env:
+  NODE_VERSION: '12.x'
+
+jobs:
+  build-and-deploy:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Install_packages
+      run: npm install
+      
+    - name: Create Distribution
+      run: |
+        echo "BUILDING FOR ${{ENVIRONMENT}}"
+        npm run build-${{ENVIRONMENT}}
+      env:
+        CI: ""
+    - name: Deploy
+      run: npm run deploy --auth-service-ui-backoffice:ComputerName=${{COMPUTER_NAME}} --auth-service-ui-backoffice:UserName=${{WEBDEPLOY_USERNAME}} --auth-service-ui-backoffice:Password={{WEBDEPLOY_PASSWORD}} --auth-service-ui-backoffice:sourcePath="dist" --auth-service-ui-backoffice:destPath=${{IIS_SITE_NAME}}
+      
