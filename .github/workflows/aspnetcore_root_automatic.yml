@@ -1,0 +1,66 @@
+name: aspnetcore automantic deployment workflow
+on:
+  workflow_call:
+    inputs:
+      PROJECT_ROOT_DIRECTORY:
+        type: string
+      DOTNET_VERSION:
+        type: string
+      CLIENT:
+        type: string
+      CLIENT_ENV:
+        type: string
+      SITE_NAME:
+        type: string
+      WEBDEPLOY_USER:
+        type: string
+      WEBDEPLOY_PASSWORD:
+        type: string
+      SERVER_IP:
+        type: string
+      SERVER_PORT:
+        type: string
+    secrets:
+      NUGET_URL_pass:
+        required: true
+      NUGET_TOKEN_pass:
+        required: true
+jobs:
+  Build-Package-IIS_Deploy:
+    runs-on: windows-latest
+    environment: 'Production'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1 b  
+        with:
+          dotnet-version: ${{ inputs.DOTNET_VERSION }}
+          source-url: ${{ secrets.NUGET_URL_pass }}
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN_pass }}
+      - name: Build and publish
+        run: |
+          dotnet build -c Release
+          dotnet publish --no-build -c Release -o ${{ env.DOTNET_ROOT}}\${{ inputs.PROJECT_ROOT_DIRECTORY }} /p:EnvironmentName=${{ inputs.CLIENT }}${{ inputs.CLIENT_ENV }}
+      - name: Clean appsettings
+        run: |
+          cd ${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}
+          $jsonFiles = Get-ChildItem appsettings*json
+          foreach ($file in $jsonFiles) {
+            if ($file.Name -inotcontains "appsettings.json") {
+              if ($file.Name -inotcontains "appsettings.Config.json") {
+                if ($file.Name -inotcontains "appsettings.${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}.json"){
+                  #Write-Host -id 3 -activity "Removing File $($file.Name)" -Status "In progress"
+                  Write-Host "$(Get-Date -f $timeStampFormat) - Removing File $($file.Name): In progress"
+                  Remove-Item $file
+                }
+              }     
+            }   
+          }
+          cd ..
+        shell: pwsh
+          
+      - name: Deploy to an IIS webserver
+        if: ${{ inputs.DEPLOY_IIS == 'Deploy' }}
+        shell: cmd
+        run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}" -dest:contentPath="${{ inputs.SITE_NAME }}",computerName="https://${{ inputs.SERVER_IP }}:${{ inputs.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="${{ inputs.WEBDEPLOY_USER }}",password="${{ inputs.WEBDEPLOY_PASSWORD }}",authtype="Basic"'
