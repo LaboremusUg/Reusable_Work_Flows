@@ -11,13 +11,13 @@ on:
         type: string
       COMPUTER_NAME:
         type: string
-      WEBDEPLOY_USERNAME:
-        type: string
-      WEBDEPLOY_PASSWORD:
-        type: string
       IIS_SITE_NAME:
         type: string
-        
+    secrets:
+      WEBDEPLOY_USERNAME:
+        required: true
+      WEBDEPLOY_PASSWORD:
+        required: true
 
 env:
   NODE_VERSION: '12.x'
@@ -39,10 +39,10 @@ jobs:
       
     - name: Create Distribution
       run: |
-        echo "BUILDING FOR ${{ENVIRONMENT}}"
-        npm run build-${{ENVIRONMENT}}
+        echo "BUILDING FOR ${{inputs.ENVIRONMENT}}"
+        npm run build-${{inputs.ENVIRONMENT}}
       env:
         CI: ""
     - name: Deploy
-      run: npm run deploy --auth-service-ui-backoffice:ComputerName=${{COMPUTER_NAME}} --auth-service-ui-backoffice:UserName=${{WEBDEPLOY_USERNAME}} --auth-service-ui-backoffice:Password={{WEBDEPLOY_PASSWORD}} --auth-service-ui-backoffice:sourcePath="dist" --auth-service-ui-backoffice:destPath=${{IIS_SITE_NAME}}
+      run: npm run deploy --auth-service-ui-backoffice:ComputerName=${{inputs.COMPUTER_NAME}} --auth-service-ui-backoffice:UserName=${{secrets.WEBDEPLOY_USERNAME}} --auth-service-ui-backoffice:Password={{secrets.WEBDEPLOY_PASSWORD}} --auth-service-ui-backoffice:sourcePath="dist" --auth-service-ui-backoffice:destPath=${{inputs.IIS_SITE_NAME}}
       
