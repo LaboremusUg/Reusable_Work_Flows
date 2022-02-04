@@ -6,15 +6,11 @@ on:
         type: string
       CLIENT_ENV:
         type: string
-      SITE_NAME:
+      AZURE_WEBAPP_NAME:
         type: string
       DOTNET_VERSION:
         type: string
-      WEBDEPLOY_USER: 
-        type: string
-      SERVER_IP:
-        type: string
-      SERVER_PORT:
+      AZURE_WEBAPP_PACKAGE_PATH:
         type: string
       PROJECT_ROOT_DIRECTORY:
         type: string
@@ -23,15 +19,9 @@ on:
         required: true
       NUGET_TOKEN:
         required: true
-      WEBDEPLOY_PASSWORD:
-        required: true
       AZURE_WEBAPP_PUBLISH_PROFILE:
         required: true
-      AZURE_WEBAPP_NAME:
-        required: true
-      AZURE_WEBAPP_PACKAGE_PATH:
-        required: true
-        
+
 jobs:
   Build-and-deploy-to-azure:
     runs-on: windows-latest
@@ -45,10 +35,12 @@ jobs:
           source-url: ${{ secrets.NUGET_URL }}
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
+          
       - name: Build and publish
         run: |
           dotnet build -c Release
           dotnet publish --no-build -c Release -o ${{ env.DOTNET_ROOT}}\${{ inputs.PROJECT_ROOT_DIRECTORY }} /p:EnvironmentName=${{ inputs.CLIENT }}${{ inputs.CLIENT_ENV }}
+      
       - name: Clean appsettings
         run: |
           cd ${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}
@@ -71,6 +63,6 @@ jobs:
         id: deploy-to-webapp 
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          app-name: ${{ inputs.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          package: ${{ inputs.AZURE_WEBAPP_PACKAGE_PATH }}
