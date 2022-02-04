@@ -11,11 +11,9 @@ on:
         type: string
       COMPUTER_NAME:
         type: string
-      IIS_SITE_NAME:
+      WEBDEPLOY_USER:
         type: string
     secrets:
-      WEBDEPLOY_USERNAME:
-        required: true
       WEBDEPLOY_PASSWORD:
         required: true
 
@@ -44,5 +42,5 @@ jobs:
       env:
         CI: ""
     - name: Deploy
-      run: npm run deploy --auth-service-ui-backoffice:ComputerName=${{inputs.COMPUTER_NAME}} --auth-service-ui-backoffice:UserName=${{secrets.WEBDEPLOY_USERNAME}} --auth-service-ui-backoffice:Password={{secrets.WEBDEPLOY_PASSWORD}} --auth-service-ui-backoffice:sourcePath="dist" --auth-service-ui-backoffice:destPath=${{inputs.IIS_SITE_NAME}}
+      run: npm run deploy --auth-service-ui-backoffice:ComputerName=${{inputs.COMPUTER_NAME}} --auth-service-ui-backoffice:UserName=${{secrets.WEBDEPLOY_USER}} --auth-service-ui-backoffice:Password={{secrets.WEBDEPLOY_PASSWORD}} --auth-service-ui-backoffice:sourcePath="dist" --auth-service-ui-backoffice:destPath=${{inputs.SITE_NAME}}
       
