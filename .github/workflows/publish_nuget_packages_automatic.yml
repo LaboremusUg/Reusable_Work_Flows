@@ -43,7 +43,7 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ inputs.DOTNET_VERSION }}
-          source-url: ${{ inputs.AZURE_ARTIFACTS_FEED_URL }}
+          source-url: ${{ secrets.AZURE_ARTIFACTS_FEED_URL }}
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_API_KEY }} 
 
