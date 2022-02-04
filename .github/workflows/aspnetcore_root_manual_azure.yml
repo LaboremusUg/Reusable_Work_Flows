@@ -14,6 +14,8 @@ on:
         type: string
       PROJECT_ROOT_DIRECTORY:
         type: string
+      SLOT_NAME:
+        type: string
     secrets:
       NUGET_URL:
         required: true
@@ -48,7 +50,7 @@ jobs:
           foreach ($file in $jsonFiles) {
             if ($file.Name -inotcontains "appsettings.json") {
               if ($file.Name -inotcontains "appsettings.Config.json") {
-                if ($file.Name -inotcontains "appsettings.${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}.json"){
+                if ($file.Name -inotcontains "appsettings.${{inputs.ENV}}.json"){
                   #Write-Host -id 3 -activity "Removing File $($file.Name)" -Status "In progress"
                   Write-Host "$(Get-Date -f $timeStampFormat) - Removing File $($file.Name): In progress"
                   Remove-Item $file
@@ -66,3 +68,4 @@ jobs:
           app-name: ${{ inputs.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ${{ inputs.AZURE_WEBAPP_PACKAGE_PATH }}
+          slot-name: ${{ inputs.SLOT_NAME }}
