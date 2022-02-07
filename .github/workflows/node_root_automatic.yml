@@ -59,5 +59,5 @@ jobs:
       env:
         CI: ""
     - name: Deploy
-      run: npm run deploy --${{inputs.APP_NAME}}:ComputerName=${{inputs.COMPUTER_NAME}} --${{inputs.APP_NAME}}:UserName=WEBDEPLOY_USER --${{inputs.APP_NAME}}:Password=8nJYcxLp4MLhkPQic --${{inputs.APP_NAME}}:sourcePath=${{inputs.DIST_FOLDER}} --${{inputs.APP_NAME}}:destPath=${{inputs.SITE_NAME}}
+      run: npm run deploy --${{inputs.APP_NAME}}:ComputerName=${{inputs.COMPUTER_NAME}} --${{inputs.APP_NAME}}:UserName=${{inputs.WEBDEPLOY_USER}} --${{inputs.APP_NAME}}:Password=${{inputs.WEBDEPLOY_PASSWORD}} --${{inputs.APP_NAME}}:sourcePath=${{inputs.DIST_FOLDER}} --${{inputs.APP_NAME}}:destPath=${{inputs.SITE_NAME}}
       
