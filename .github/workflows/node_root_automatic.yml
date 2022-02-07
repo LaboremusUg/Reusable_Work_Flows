@@ -15,6 +15,8 @@ on:
         type: string
       SITE_NAME:
         type: string
+      DIST_FOLDER:
+        type: string
     secrets:
       WEBDEPLOY_PASSWORD:
         required: true
@@ -44,5 +46,5 @@ jobs:
       env:
         CI: ""
     - name: Deploy
-      run: npm run deploy --${{inputs.APP_NAME}}:ComputerName=${{inputs.COMPUTER_NAME}} --${{inputs.APP_NAME}}:UserName=${{secrets.WEBDEPLOY_USER}} --${{inputs.APP_NAME}}:Password={{secrets.WEBDEPLOY_PASSWORD}} --${{inputs.APP_NAME}}:sourcePath="dist" --${{inputs.APP_NAME}}:destPath=${{inputs.SITE_NAME}}
+      run: npm run deploy --${{inputs.APP_NAME}}:ComputerName=${{inputs.COMPUTER_NAME}} --${{inputs.APP_NAME}}:UserName=${{secrets.WEBDEPLOY_USER}} --${{inputs.APP_NAME}}:Password={{secrets.WEBDEPLOY_PASSWORD}} --${{inputs.APP_NAME}}:sourcePath=${{inputs.DIST_FOLDER}} --${{inputs.APP_NAME}}:destPath=${{inputs.SITE_NAME}}
       
