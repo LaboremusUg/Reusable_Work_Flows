@@ -59,5 +59,4 @@ jobs:
       env:
         CI: ""
     - name: Deploy
-      shell: cmd
-      run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="build" -dest:contentPath="${{ inputs.SITE_NAME }}",computerName="https://154.0.128.234:18172/msdeploy.axd?${{inputs.SITE_NAME}}",username="kevin",password="8nJYcxLp4MLhkPQic",authtype="Basic"'
+      run: npm run deploy --autodatacapture-backoffice:ComputerName="https://154.0.128.234:18172/msdeploy.axd?site=Bou_NationalIdVerification_Auth_Ui_React" --autodatacapture-backoffice:UserName="kevin" --autodatacapture-backoffice:Password="8nJYcxLp4MLhkPQic" --autodatacapture-backoffice:sourcePath="build" --autodatacapture-backoffice:destPath="Bou_NationalIdVerification_Auth_Ui_React"
