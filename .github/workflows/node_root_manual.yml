@@ -15,12 +15,13 @@ on:
       SERVER_IP:
         type: string
       SERVER_PORT:
+        type: string   
+      WEBDEPLOY_USER:
         type: string
     secrets:
       WEBDEPLOY_PASSWORD:
         required: true
-      WEBDEPLOY_USERNAME:
-        required: true
+
 jobs:
   Build-Package-IIS_Deploy:
     runs-on: windows-latest
@@ -41,21 +42,14 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: AuthUI-${{ inputs.CLIENT }}-${{ inputs.CLIENT_ENV }}
-        path: dist
+        path: build
         
     - name: Download artifact from build job
-      if: ${{ inputs.DOWNLOAD_PACKAGE == 'Download' }}
+      if: ${{ inputs.DOWNLOAD_PACKAGE == 'true' }}
       uses: actions/download-artifact@v2
       with:
         name: AuthUI-${{ inputs.CLIENT }}-${{ inputs.CLIENT_ENV }}
         
     - name: Deploy to an IIS webserver
-      if: ${{ inputs.DEPLOY_IIS == 'Deploy' }}
-      run: npm run deploy --auth-service-ui-backoffice:ComputerName="https://${{ inputs.SERVER_IP }}:${{ inputs.SERVER_PORT }}/msdeploy.axd" --auth-service-ui-backoffice:UserName="${{ secrets.WEBDEPLOY_USERNAME }}" --auth-service-ui-backoffice:Password="${{ secrets.WEBDEPLOY_PASSWORD }}" --auth-service-ui-backoffice:sourcePath="dist" --auth-service-ui-backoffice:destPath="${{ inputs.SITE_NAME }}"
-    # - name: 'Deploy to Azure WebApp'
-    #   id: deploy-to-webapp 
-    #   uses: azure/webapps-deploy@v2
-    #   with:
-    #     app-name: ${{ env.AZURE_WEBAPP_NAME }}
-    #     publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-    #     package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      if: ${{ inputs.DEPLOY_IIS == 'false' }}
+      run: npm run deploy --auth-service-ui-backoffice:ComputerName="https://${{ inputs.SERVER_IP }}:${{ inputs.SERVER_PORT }}/msdeploy.axd" --auth-service-ui-backoffice:UserName="${{ secrets.WEBDEPLOY_USER }}" --auth-service-ui-backoffice:Password="${{ secrets.WEBDEPLOY_PASSWORD }}" --auth-service-ui-backoffice:sourcePath="build" --auth-service-ui-backoffice:destPath="${{ inputs.SITE_NAME }}"
