@@ -40,7 +40,7 @@ jobs:
       run: |
         echo "${{inputs.APP_NAME}}"
         echo "${{inputs.WEBDEPLOY_USER}}"
-        echo "${{inputs.WEBDEPLOY_PASSWORD}}"
+        echo "${{secrets.WEBDEPLOY_PASSWORD}}"
         
     - name: Cache Node Modules
       id: cache-node-modules
