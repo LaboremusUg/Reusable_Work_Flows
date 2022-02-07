@@ -13,6 +13,8 @@ on:
         type: string
       WEBDEPLOY_USER:
         type: string
+      SITE_NAME:
+        type: string
     secrets:
       WEBDEPLOY_PASSWORD:
         required: true
