@@ -59,5 +59,4 @@ jobs:
       env:
         CI: ""
     - name: Deploy
-      run: npm run deploy --${{inputs.APP_NAME}}:ComputerName="${{inputs.COMPUTER_NAME}}" --${{inputs.APP_NAME}}:UserName="kevin" --${{inputs.APP_NAME}}:Password="8nJYcxLp4MLhkPQic" --${{inputs.APP_NAME}}:sourcePath=${{inputs.DIST_FOLDER}} --${{inputs.APP_NAME}}:destPath=${{inputs.SITE_NAME}}
-      
+      run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="./build" -dest:contentPath="${{ inputs.SITE_NAME }}",computerName="https://154.0.128.234:18172/msdeploy.axd?${{inputs.SITE_NAME}}",username="kevin",password="8nJYcxLp4MLhkPQic",authtype="Basic"'
