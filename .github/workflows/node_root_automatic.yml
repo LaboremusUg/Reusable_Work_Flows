@@ -59,4 +59,5 @@ jobs:
       env:
         CI: ""
     - name: Deploy
+      shell: cmd
       run: npm run deploy --autodatacapture-backoffice:ComputerName="https://154.0.128.234:18172/msdeploy.axd?site=Bou_NationalIdVerification_Auth_Ui_React" --autodatacapture-backoffice:UserName="kevin" --autodatacapture-backoffice:Password="8nJYcxLp4MLhkPQic" --autodatacapture-backoffice:sourcePath="build" --autodatacapture-backoffice:destPath="Bou_NationalIdVerification_Auth_Ui_React"
