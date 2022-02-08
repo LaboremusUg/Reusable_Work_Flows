@@ -19,7 +19,10 @@ on:
         type: string
       REPO_NAME:
         type: string
-
+    secrets:
+      WEBDEPLOY_PASSWORD:
+        required: true
+        
 env:
   NODE_VERSION: '12.x'
 
