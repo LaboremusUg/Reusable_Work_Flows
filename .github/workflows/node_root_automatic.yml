@@ -7,8 +7,6 @@ on:
     inputs:
       ENVIRONMENT:
         type: string
-      APP_NAME:
-        type: string
       COMPUTER_NAME:
         type: string
       WEBDEPLOY_USER:
