@@ -35,12 +35,6 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
         
-    - name: LOG_INFO
-      run: |
-        echo "${{inputs.APP_NAME}}"
-        echo "${{inputs.WEBDEPLOY_USER}}"
-        echo "${{inputs.WEBDEPLOY_PASSWORD}}"
-        
     - name: Cache Node Modules
       id: cache-node-modules
       uses: actions/cache@v2
