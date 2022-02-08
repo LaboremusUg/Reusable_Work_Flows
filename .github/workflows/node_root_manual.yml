@@ -52,5 +52,5 @@ jobs:
         name: AuthUI-${{ inputs.CLIENT }}-${{ inputs.CLIENT_ENV }}
         
     - name: Deploy to an IIS webserver
-      if: ${{ inputs.DEPLOY_IIS == 'false' }}
+      if: ${{ inputs.DEPLOY_IIS == 'true' }}
       run: npm run deploy --auth-service-ui-backoffice:ComputerName="https://${{ inputs.SERVER_IP }}:${{ inputs.SERVER_PORT }}/msdeploy.axd" --auth-service-ui-backoffice:UserName="${{ secrets.WEBDEPLOY_USER }}" --auth-service-ui-backoffice:Password="${{ secrets.WEBDEPLOY_PASSWORD }}" --auth-service-ui-backoffice:sourcePath="build" --auth-service-ui-backoffice:destPath="${{ inputs.SITE_NAME }}"
