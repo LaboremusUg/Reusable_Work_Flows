@@ -9,6 +9,8 @@ on:
         type: string
       COMPUTER_NAME:
         type: string
+      APP_NAME:
+        type: string
       WEBDEPLOY_USER:
         type: string
       SITE_NAME:
