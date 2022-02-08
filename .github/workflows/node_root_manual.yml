@@ -11,12 +11,14 @@ on:
       DEPLOY_IIS:
         type: string
       SITE_NAME:
-        type: string
-      SERVER_IP:
-        type: string
-      SERVER_PORT:
         type: string   
       WEBDEPLOY_USER:
+        type: string
+      REPO_NAME:
+        type: string
+      DIST_FOLDER:
+        type: string
+      COMPUTER_NAME:
         type: string
     secrets:
       WEBDEPLOY_PASSWORD:
@@ -42,15 +44,17 @@ jobs:
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
       with:
-        name: AuthUI-${{ inputs.CLIENT }}-${{ inputs.CLIENT_ENV }}
+        name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT }}-${{ inputs.CLIENT_ENV }}
         path: build
         
     - name: Download artifact from build job
       if: ${{ inputs.DOWNLOAD_PACKAGE == 'true' }}
       uses: actions/download-artifact@v2
       with:
-        name: AuthUI-${{ inputs.CLIENT }}-${{ inputs.CLIENT_ENV }}
+        name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT }}-${{ inputs.CLIENT_ENV }}
         
     - name: Deploy to an IIS webserver
       if: ${{ inputs.DEPLOY_IIS == 'true' }}
-      run: npm run deploy --auth-service-ui-backoffice:ComputerName="https://${{ inputs.SERVER_IP }}:${{ inputs.SERVER_PORT }}/msdeploy.axd" --auth-service-ui-backoffice:UserName="${{ secrets.WEBDEPLOY_USER }}" --auth-service-ui-backoffice:Password="${{ secrets.WEBDEPLOY_PASSWORD }}" --auth-service-ui-backoffice:sourcePath="build" --auth-service-ui-backoffice:destPath="${{ inputs.SITE_NAME }}"
+      shell: cmd
+      run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="D:\a\${{inputs.REPO_NAME}}\${{inputs.REPO_NAME}}\${{inputs.DIST_FOLDER}}" -dest:contentPath="${{inputs.SITE_NAME}}",computerName="${{inputs.COMPUTER_NAME}}?site=${{inputs.SITE_NAME}}",username="${{inputs.WEBDEPLOY_USER}}",password="${{secrets.WEBDEPLOY_PASSWORD}}",authtype="Basic"'
+
