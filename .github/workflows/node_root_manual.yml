@@ -36,6 +36,8 @@ jobs:
       run: |
         npm install
         npm run build-${{inputs.CLIENT_ENV}}
+      env:
+        CI: ""
         
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
