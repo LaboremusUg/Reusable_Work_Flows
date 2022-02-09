@@ -14,8 +14,6 @@ on:
         type: string
       WEBDEPLOY_USER:
         type: string
-      WEBDEPLOY_PASSWORD:
-        type: string
       SERVER_IP:
         type: string
       SERVER_PORT:
@@ -24,6 +22,8 @@ on:
       NUGET_URL_pass:
         required: true
       NUGET_TOKEN_pass:
+        required: true
+      WEBDEPLOY_PASSWORD:
         required: true
 jobs:
   Build-Package-IIS_Deploy:
@@ -62,4 +62,4 @@ jobs:
           
       - name: Deploy to an IIS webserver
         shell: cmd
-        run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}" -dest:contentPath="${{ inputs.SITE_NAME }}",computerName="https://${{ inputs.SERVER_IP }}:${{ inputs.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="${{ inputs.WEBDEPLOY_USER }}",password="${{ inputs.WEBDEPLOY_PASSWORD }}",authtype="Basic"'
+        run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}" -dest:contentPath="${{ inputs.SITE_NAME }}",computerName="https://${{ inputs.SERVER_IP }}:${{ inputs.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="${{ inputs.WEBDEPLOY_USER }}",password="${{ secrets.WEBDEPLOY_PASSWORD }}",authtype="Basic"'
