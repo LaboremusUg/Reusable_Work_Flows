@@ -32,7 +32,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET
-        uses: actions/setup-dotnet@v1 b  
+        uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ inputs.DOTNET_VERSION }}
           source-url: ${{ secrets.NUGET_URL_pass }}
