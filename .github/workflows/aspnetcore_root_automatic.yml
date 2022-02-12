@@ -40,9 +40,8 @@ jobs:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN_pass }}
           
       - name: Build and publish
-        run: dotnet publish
-           ${{ env.DOTNET_ROOT }}/GatewayService.csproj
-           --configuration Release
+        run: |
+          dotnet publish ${{ env.DOTNET_ROOT }}\GatewayService.csproj --configuration Release
            
       - name: Clean appsettings
         run: |
