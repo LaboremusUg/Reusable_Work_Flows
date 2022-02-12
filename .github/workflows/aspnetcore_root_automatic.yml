@@ -38,9 +38,12 @@ jobs:
           source-url: ${{ secrets.NUGET_URL_pass }}
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN_pass }}
+          
       - name: Build and publish
-        run: |
-          dotnet publish -c Release -o ${{ env.DOTNET_ROOT}}\${{ inputs.PROJECT_ROOT_DIRECTORY }}
+        run: dotnet publish
+           ${{ env.DOTNET_ROOT }}/GatewayService/GatewayService.csproj
+           --configuration Release
+           
       - name: Clean appsettings
         run: |
           cd ${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}
