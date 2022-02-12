@@ -41,7 +41,7 @@ jobs:
           
       - name: Build and publish
         run: dotnet publish
-           ${{ env.DOTNET_ROOT }}/GatewayService/GatewayService.csproj
+           ${{ env.DOTNET_ROOT }}/GatewayService.csproj
            --configuration Release
            
       - name: Clean appsettings
