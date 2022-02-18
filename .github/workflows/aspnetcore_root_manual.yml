@@ -22,6 +22,8 @@ on:
         type: string
       PROJECT_ROOT_DIRECTORY:
         type: string
+      PROJECT_NAME:
+        type: string
     secrets:
       NUGET_URL:
         required: true
@@ -42,10 +44,11 @@ jobs:
           source-url: ${{ secrets.NUGET_URL }}
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
+          
       - name: Build and publish
         run: |
-          dotnet build -c Release
-          dotnet publish --no-build -c Release -o ${{ env.DOTNET_ROOT}}\${{ inputs.PROJECT_ROOT_DIRECTORY }} /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}
+          dotnet publish ${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }} /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}
+      
       - name: Clean appsettings
         run: |
           cd ${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}
@@ -73,6 +76,7 @@ jobs:
         uses: actions/download-artifact@v2.1.0
         with:
           path: '${{ env.PROJECT_ROOT_DIRECTORY }}'
+          
       - name: Deploy to an IIS webserver
         if: ${{ inputs.DEPLOY_IIS == 'true' }}
 
