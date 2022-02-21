@@ -46,6 +46,7 @@ jobs:
           dotnet publish ${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }} /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}
            
       - name: Clean appsettings
+        shell: pwsh
         run: |
           cd ${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}
           $jsonFiles = Get-ChildItem appsettings*json
@@ -60,8 +61,8 @@ jobs:
               }     
             }   
           }
-          cd ..
-        shell: pwsh
+
+        
       - name: Stop Application Pool
         run: '"C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:recycleApp -dest:recycleApp="${{ inputs.SITE_NAME }}",recycleMode="StopAppPool",computerName="https://${{ inputs.SERVER_IP }}:${{ inputs.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="LUG-TCAGENT\kevin",password="${{ secrets.WEBDEPLOY_PASSWORD }}",AuthType="Basic"'
 
