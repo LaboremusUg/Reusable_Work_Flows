@@ -46,8 +46,7 @@ jobs:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
           
       - name: Build and publish
-        run: |
-          dotnet publish ${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }} /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}
+        run: dotnet publish ${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }} /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}
       
       - name: Clean appsettings
         run: |
