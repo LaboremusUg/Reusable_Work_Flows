@@ -63,18 +63,6 @@ jobs:
               }     
             }   
           }
-          cd ..
-          
-      - name: encrpt appsetting
-      
-        if: ${{ inputs.CLIENT == 'Dfcu' }}
-        run: |
-          cd ${{ env.DOTNET_ROOT}}\${{ inputs.PROJECT_ROOT_DIRECTORY }}
-          Import-Module RepoCrypto
-          $key = 'mMXkoLZEfBk='
-          Write-Host "Your Key is $($key)"
-          Write-Host "$(Get-Date -f $timeStampFormat) - Replacing env appsettings file with encrypted one: In progress"
-          Protect-File "appsettings.${{inputs.CLIENT_ENV}}.json" -Algorithm DES -KeyAsPlainText $key -RemoveSource
 
       - name: Upload build Artifact
         uses: actions/upload-artifact@v2.3.1
