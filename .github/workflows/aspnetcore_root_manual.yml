@@ -74,16 +74,8 @@ jobs:
       - name: encrpt appsetting
         if: ${{ inputs.CLIENT == 'ADC' }}
         run: |
-          Try {
-            Import-Module RepoCrypto
-          }
-          Catch {
-            $ErrorMessage = $_.Exception.Message
-            Write-Host $errorKey
-            Write-Host "Error Importing Module"
-            Write-Host $ErrorMessage
-            exit(1)
-          }
+          cd ${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}
+          Import-Module RepoCrypto
           $key = 'mMXkoLZEfBk='
           Write-Host "Your Key is $($key)"
           Write-Host "$(Get-Date -f $timeStampFormat) - Replacing env appsettings file with encrypted one: In progress"
