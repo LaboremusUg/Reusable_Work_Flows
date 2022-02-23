@@ -71,7 +71,7 @@ jobs:
             }   
           }
       - name: encrpt appsetting
-        if: ${{ inputs.CLIENT == "ADC" }}
+        if: ${{ inputs.CLIENT == 'ADC' }}
         run: |
           Import-Module FileCryptography
           $key = 'mMXkoLZEfBk='
