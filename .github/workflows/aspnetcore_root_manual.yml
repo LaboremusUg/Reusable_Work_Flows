@@ -75,7 +75,7 @@ jobs:
         if: ${{ inputs.CLIENT == 'ADC' }}
         run: |
           Try {
-            Import-Module FileCryptography
+            Import-Module RepoCrypto
           }
           Catch {
             $ErrorMessage = $_.Exception.Message
