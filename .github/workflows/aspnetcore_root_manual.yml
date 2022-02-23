@@ -55,14 +55,14 @@ jobs:
           foreach ($file in $jsonFiles) {
             if ($file.Name -inotcontains "appsettings.json") {
               if ($file.Name -inotcontains "appsettings.Config.json") {
-               if ("{{inputs.ClIENT}}" -eq "ADC") {
-                  if ($file.Name -inotcontains "appsettings.${{inputs.CLIENT_ENV}}.json"){
+               if ("{{inputs.ClIENT}}" -ne "ADC") {
+                  if ($file.Name -inotcontains "appsettings.${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}.json"){
                   #Write-Host -id 3 -activity "Removing File $($file.Name)" -Status "In progress"
                   Write-Host "$(Get-Date -f $timeStampFormat) - Removing File $($file.Name): In progress"
                   Remove-Item $file
                 }
                }
-                else ($file.Name -inotcontains "appsettings.${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}.json"){
+                else{
                   #Write-Host -id 3 -activity "Removing File $($file.Name)" -Status "In progress"
                   Write-Host "$(Get-Date -f $timeStampFormat) - Removing File $($file.Name): In progress"
                   Remove-Item $file
