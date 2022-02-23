@@ -64,9 +64,8 @@ jobs:
             }   
           }
       - name: encrpt appsetting
-        if: ${{ inputs.CLIENT == 'ADC' }}
+        if: ${{ inputs.CLIENT == 'Dfcu' }}
         run: |
-          cd ${{ env.DOTNET_ROOT}}\${{ inputs.PROJECT_ROOT_DIRECTORY }}
           Import-Module RepoCrypto
           $key = 'mMXkoLZEfBk='
           Write-Host "Your Key is $($key)"
