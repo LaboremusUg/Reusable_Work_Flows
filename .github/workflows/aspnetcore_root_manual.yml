@@ -50,7 +50,7 @@ jobs:
   
       - name: Clean appsettings
         run: |
-          cd ${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}
+          cd ${{ env.DOTNET_ROOT}}\${{ inputs.PROJECT_ROOT_DIRECTORY }}
           $jsonFiles = Get-ChildItem appsettings*json
           foreach ($file in $jsonFiles) {
             if ($file.Name -inotcontains "appsettings.json") {
@@ -74,7 +74,7 @@ jobs:
       - name: encrpt appsetting
         if: ${{ inputs.CLIENT == 'ADC' }}
         run: |
-          cd ${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}
+          cd ${{ env.DOTNET_ROOT}}\${{ inputs.PROJECT_ROOT_DIRECTORY }}
           Import-Module RepoCrypto
           $key = 'mMXkoLZEfBk='
           Write-Host "Your Key is $($key)"
