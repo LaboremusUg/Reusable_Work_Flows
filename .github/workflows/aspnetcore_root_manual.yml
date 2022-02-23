@@ -63,17 +63,27 @@ jobs:
                 }
                }
                 else{
+                  if ($file.Name -inotcontains "appsettings.${{inputs.CLIENT_ENV}}.json"){
                   #Write-Host -id 3 -activity "Removing File $($file.Name)" -Status "In progress"
                   Write-Host "$(Get-Date -f $timeStampFormat) - Removing File $($file.Name): In progress"
                   Remove-Item $file
-                }
+                }}
               }     
             }   
           }
       - name: encrpt appsetting
         if: ${{ inputs.CLIENT == 'ADC' }}
         run: |
-          Import-Module FileCryptography
+          Try {
+            Import-Module FileCryptography
+          }
+          Catch {
+            $ErrorMessage = $_.Exception.Message
+            Write-Host $errorKey
+            Write-Host "Error Importing Module"
+            Write-Host $ErrorMessage
+            exit(1)
+          }
           $key = 'mMXkoLZEfBk='
           Write-Host "Your Key is $($key)"
           Write-Host "$(Get-Date -f $timeStampFormat) - Replacing env appsettings file with encrypted one: In progress"
