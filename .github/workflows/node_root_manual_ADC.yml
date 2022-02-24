@@ -34,17 +34,18 @@ jobs:
       with:
         node-version: 14.x
         cache: 'npm'
-    - name: npm install, build, and test
+    - name: npm install and build
       run: |
         npm install
-        npm run build-${{inputs.CLIENT_ENV}}
+        npm run build-${{ inputs.CLIENT_ENV }}
       env:
         CI: ""
         
     - name: Upload artifact for deployment job
+      if: ${{ inputs.DOWNLOAD_PACKAGE == 'true' }}
       uses: actions/upload-artifact@v2
       with:
-        name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT }}-${{ inputs.CLIENT_ENV }}
+        name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT_ENV }}
         path: ${{inputs.DIST_FOLDER}}
         
     - name: Download artifact from build job
