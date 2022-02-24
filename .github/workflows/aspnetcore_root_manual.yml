@@ -69,14 +69,14 @@ jobs:
         if: ${{ inputs.DOWNLOAD_PACKAGE == 'true' }}
         uses: actions/upload-artifact@v2.3.1
         with:
-          name:  Solution-File
+          name: Requests-Api-${{ inputs.CLIENT }}${{ inputs.CLIENT_ENV }}
           path: ${{ env.DOTNET_ROOT}}/myapp
           
       - name: Download build artifact
         if: ${{ inputs.DOWNLOAD_PACKAGE == 'true' }}
         uses: actions/download-artifact@v2.1.0
         with:
-          name: Solution-File
+          name: Requests-Api-${{ inputs.CLIENT }}${{ inputs.CLIENT_ENV }}
           retention-days: 1
  
 
