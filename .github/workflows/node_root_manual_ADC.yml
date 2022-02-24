@@ -37,7 +37,7 @@ jobs:
     - name: npm install, build, and test
       run: |
         npm install
-        npm run build-${{inputs.CLIENT}}-${{inputs.CLIENT_ENV}}
+        npm run build-${{inputs.CLIENT_ENV}}
       env:
         CI: ""
         
