@@ -52,7 +52,7 @@ jobs:
     - name: Create Distribution for ${{inputs.APP_NAME}}
       run: |
         echo "BUILDING FOR ${{inputs.ENVIRONMENT}}"
-        npm run build-${{inputs.ENVIRONMENT}}
+        npm run build-${{inputs.CLIENT}}-${{inputs.CLIENT_ENV}}
       env:
         CI: ""
     - name: Deploy
