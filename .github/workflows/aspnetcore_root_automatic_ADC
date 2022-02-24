@@ -1,0 +1,87 @@
+name: aspnetcore automantic deployment workflow
+on:
+  workflow_call:
+    inputs:
+      PROJECT_ROOT_DIRECTORY:
+        type: string
+      DOTNET_VERSION:
+        type: string
+      CLIENT:
+        type: string
+      CLIENT_ENV:
+        type: string
+      SITE_NAME:
+        type: string
+      PROJECT_NAME:
+        type: string
+    secrets:
+      NUGET_URL_pass:
+        required: true
+      NUGET_TOKEN_pass:
+        required: true
+      WEBDEPLOY_PASSWORD:
+        required: true
+      WEBDEPLOY_USER:
+        required: true
+      SERVER_IP:
+        required: true
+      SERVER_PORT:
+        required: true
+jobs:
+  Build-Package-IIS_Deploy:
+    runs-on: self-hosted
+    environment: 'Production'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ inputs.DOTNET_VERSION }}
+          source-url: ${{ secrets.NUGET_URL_pass }}
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN_pass }}
+          
+      - name: Build and publish
+        run: |
+          dotnet publish ${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }} /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}
+           
+      - name: Clean appsettings
+
+        run: |
+          cd ${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}
+          $jsonFiles = Get-ChildItem appsettings*json
+          foreach ($file in $jsonFiles) {
+            if ($file.Name -inotcontains "appsettings.json") {
+              if ($file.Name -inotcontains "appsettings.Config.json") {
+                if ($file.Name -inotcontains "appsettings.${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}.json"){
+                  #Write-Host -id 3 -activity "Removing File $($file.Name)" -Status "In progress"
+                  Write-Host "$(Get-Date -f $timeStampFormat) - Removing File $($file.Name): In progress"
+                  Remove-Item $file
+                }
+              }     
+            }   
+          }
+          
+       - name: encrpt appsetting
+      
+        if: ${{ inputs.CLIENT == 'Dfcu' }}
+        run: |
+          cd ${{ env.DOTNET_ROOT}}\${{ inputs.PROJECT_ROOT_DIRECTORY }}
+          Import-Module RepoCrypto
+          $key = 'mMXkoLZEfBk='
+          Write-Host "Your Key is $($key)"
+          Write-Host "$(Get-Date -f $timeStampFormat) - Replacing env appsettings file with encrypted one: In progress"
+          Protect-File "appsettings.${{inputs.CLIENT_ENV}}.json" -Algorithm DES -KeyAsPlainText $key -RemoveSource
+
+        
+      - name: Stop Application Pool
+        shell: cmd
+        run: '"C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:recycleApp -dest:recycleApp="${{ inputs.SITE_NAME }}",recycleMode="StopAppPool",computerName="https://${{ secrets.SERVER_IP }}:${{ secrets.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="LUG-TCAGENT\kevin",password="${{ secrets.WEBDEPLOY_PASSWORD }}",AuthType="Basic"'
+
+      - name: Deploy to an IIS webserver
+        shell: cmd
+        run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}" -dest:contentPath="${{ inputs.SITE_NAME }}",computerName="https://${{ secrets.SERVER_IP }}:${{ secrets.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="${{ secrets.WEBDEPLOY_USER }}",password="${{ secrets.WEBDEPLOY_PASSWORD }}",authtype="Basic"'
+      
+      - name: Start Application Pool
+        shell: cmd
+        run: '"C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:recycleApp -dest:recycleApp="${{ inputs.SITE_NAME }}",recycleMode="StartAppPool",computerName="https://${{ secrets.SERVER_IP }}:${{ secrets.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="LUG-TCAGENT\kevin",password="${{ secrets.WEBDEPLOY_PASSWORD }}",AuthType="Basic"'   
