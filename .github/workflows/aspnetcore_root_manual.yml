@@ -69,7 +69,7 @@ jobs:
         uses: actions/upload-artifact@v2.3.1
         with:
           name: '${{ inputs.PROJECT_ROOT_DIRECTORY }}_${{ inputs.CLIENT }}'
-          path: '${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}'
+          path: '${{ inputs.PROJECT_ROOT_DIRECTORY }}'
           
       - name: Download build artifact
         if: ${{ inputs.DOWNLOAD_PACKAGE == 'true' }}
