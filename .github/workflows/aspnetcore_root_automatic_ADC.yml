@@ -62,7 +62,7 @@ jobs:
             }   
           }
           
-       - name: encrpt appsetting
+      - name: encrpt appsetting
       
         if: ${{ inputs.CLIENT == 'Dfcu' }}
         run: |
