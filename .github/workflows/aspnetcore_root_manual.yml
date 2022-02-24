@@ -14,12 +14,6 @@ on:
         type: string
       DOTNET_VERSION:
         type: string
-      WEBDEPLOY_USER: 
-        type: string
-      SERVER_IP:
-        type: string
-      SERVER_PORT:
-        type: string
       PROJECT_ROOT_DIRECTORY:
         type: string
       PROJECT_NAME:
@@ -30,6 +24,12 @@ on:
       NUGET_TOKEN:
         required: true
       WEBDEPLOY_PASSWORD:
+        required: true
+      WEBDEPLOY_USER: 
+        required: true
+      SERVER_IP:
+        required: true
+      SERVER_PORT:
         required: true
 jobs:
   Build-Package-IIS_Deploy:
@@ -79,14 +79,14 @@ jobs:
       - name: Stop Application Pool
         if: ${{ inputs.DEPLOY_IIS == 'true' }}
         shell: cmd
-        run: '"C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:recycleApp -dest:recycleApp="${{ inputs.SITE_NAME }}",recycleMode="StopAppPool",computerName="https://${{ inputs.SERVER_IP }}:${{ inputs.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="LUG-TCAGENT\kevin",password="${{ secrets.WEBDEPLOY_PASSWORD }}",AuthType="Basic"'
+        run: '"C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:recycleApp -dest:recycleApp="${{ inputs.SITE_NAME }}",recycleMode="StopAppPool",computerName="https://${{ secrets.SERVER_IP }}:${{ secrets.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="LUG-TCAGENT\kevin",password="${{ secrets.WEBDEPLOY_PASSWORD }}",AuthType="Basic"'
 
       - name: Deploy to an IIS webserver
         if: ${{ inputs.DEPLOY_IIS == 'true' }}
         shell: cmd
-        run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}" -dest:contentPath="${{ inputs.SITE_NAME }}",computerName="https://${{ inputs.SERVER_IP }}:${{ inputs.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="${{ inputs.WEBDEPLOY_USER }}",password="${{ secrets.WEBDEPLOY_PASSWORD }}",authtype="Basic"'
+        run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}" -dest:contentPath="${{ inputs.SITE_NAME }}",computerName="https://${{ secrets.SERVER_IP }}:${{ secrets.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="${{ secrets.WEBDEPLOY_USER }}",password="${{ secrets.WEBDEPLOY_PASSWORD }}",authtype="Basic"'
       
       - name: Start Application Pool
         if: ${{ inputs.DEPLOY_IIS == 'true' }}
         shell: cmd
-        run: '"C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:recycleApp -dest:recycleApp="${{ inputs.SITE_NAME }}",recycleMode="StartAppPool",computerName="https://${{ inputs.SERVER_IP }}:${{ inputs.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="LUG-TCAGENT\kevin",password="${{ secrets.WEBDEPLOY_PASSWORD }}",AuthType="Basic"'
+        run: '"C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:recycleApp -dest:recycleApp="${{ inputs.SITE_NAME }}",recycleMode="StartAppPool",computerName="https://${{ secrets.SERVER_IP }}:${{ secrets.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="LUG-TCAGENT\kevin",password="${{ secrets.WEBDEPLOY_PASSWORD }}",AuthType="Basic"'
