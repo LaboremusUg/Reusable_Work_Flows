@@ -45,7 +45,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT }}-${{ inputs.CLIENT_ENV }}
-        path: build
+        path: ${{inputs.DIST_FOLDER}}
         
     - name: Download artifact from build job
       if: ${{ inputs.DOWNLOAD_PACKAGE == 'true' }}
