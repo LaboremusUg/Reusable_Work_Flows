@@ -42,11 +42,11 @@ jobs:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
           
       - name: Build and publish
-        run: dotnet publish ${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }} /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}
+        run: dotnet publish ${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}/app /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}
            
       - name: Clean appsettings
         run: |
-          cd ${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}
+          cd ${{ env.DOTNET_ROOT}}/app
           $jsonFiles = Get-ChildItem appsettings*json
           foreach ($file in $jsonFiles) {
             if ($file.Name -inotcontains "appsettings.json") {
@@ -67,7 +67,7 @@ jobs:
 
       - name: Deploy to an IIS webserver
         shell: cmd
-        run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}" -dest:contentPath="${{ inputs.SITE_NAME }}",computerName="https://${{ secrets.SERVER_IP }}:${{ secrets.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="${{ secrets.WEBDEPLOY_USER }}",password="${{ secrets.WEBDEPLOY_PASSWORD }}",authtype="Basic"'
+        run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="${{ env.DOTNET_ROOT}}/app" -dest:contentPath="${{ inputs.SITE_NAME }}",computerName="https://${{ secrets.SERVER_IP }}:${{ secrets.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="${{ secrets.WEBDEPLOY_USER }}",password="${{ secrets.WEBDEPLOY_PASSWORD }}",authtype="Basic"'
       
       - name: Start Application Pool
         shell: cmd
