@@ -67,7 +67,7 @@ jobs:
       
         if: ${{ inputs.CLIENT == 'Dfcu' }}
         run: |
-          cd ${{ env.DOTNET_ROOT}}\${{ inputs.PROJECT_ROOT_DIRECTORY }}
+          cd ${{ env.DOTNET_ROOT}}\myapp
           Import-Module RepoCrypto
           $key = 'mMXkoLZEfBk='
           Write-Host "Your Key is $($key)"
