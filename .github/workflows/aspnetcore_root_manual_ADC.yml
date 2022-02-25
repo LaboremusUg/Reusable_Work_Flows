@@ -68,7 +68,6 @@ jobs:
         shell: cmd
         run: |
           git clone https://github.com/tmcoma/RepoCrypto.git "$HOME\Documents\WindowsPowerShell\Modules\RepoCrypto";
-          Import-Module RepoCrypto
           
       - name: encrpt appsetting
         if: ${{ inputs.CLIENT == 'Dfcu' }}
