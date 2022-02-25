@@ -72,7 +72,7 @@ jobs:
           cd "$HOME\Documents\WindowsPowerShell\Modules\RepoCrypto"
           ls
           cd ${{ env.DOTNET_ROOT}}\myapp
-          Import-Module -Name $HOME\Documents\WindowsPowerShell\Modules\RepoCrypto -Verbose
+          Import-Module RepoCrypto -Verbose
           Get-InstalledModule -Name RepoCrypto
           $key = 'mMXkoLZEfBk='
           Write-Host "Your Key is $($key)"
