@@ -50,11 +50,21 @@ jobs:
       run: npm install
       
     - name: Create Distribution for ${{inputs.APP_NAME}}
+      if: ${{inputs.CLIENT_ENV}} != 'test'
       run: |
         echo "BUILDING FOR ${{inputs.ENVIRONMENT}}"
         npm run build-${{inputs.CLIENT}}-${{inputs.CLIENT_ENV}}
       env:
         CI: ""
+        
+    - name: Create Distribution for ${{inputs.APP_NAME}}
+      if: ${{inputs.CLIENT_ENV}} = 'test'
+      run: |
+        echo "BUILDING FOR ${{inputs.ENVIRONMENT}}"
+        npm run build-${{inputs.CLIENT_ENV}}
+      env:
+        CI: ""
+        
     - name: Deploy
       shell: cmd
       run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="D:\a\${{inputs.REPO_NAME}}\${{inputs.REPO_NAME}}\${{inputs.DIST_FOLDER}}" -dest:contentPath="${{inputs.SITE_NAME}}",computerName="${{inputs.COMPUTER_NAME}}?site=${{inputs.SITE_NAME}}",username="${{inputs.WEBDEPLOY_USER}}",password="${{secrets.WEBDEPLOY_PASSWORD}}",authtype="Basic"'
