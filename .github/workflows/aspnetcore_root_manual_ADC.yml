@@ -74,11 +74,8 @@ jobs:
         shell: pwsh
         run: |        
           cd ${{ env.DOTNET_ROOT}}\myapp
-          Try {
-            Import-Module -Name $HOME\Documents\WindowsPowerShell\Modules\RepoCrypto -Verbose
-          } Catch {
-            write-host "Failed to get RepoCrypto"
-          }          
+          Import-Module -Name $HOME\Documents\WindowsPowerShell\Modules\RepoCrypto -Verbose
+          Get-InstalledModule -Name RepoCrypto
           $key = 'mMXkoLZEfBk='
           Write-Host "Your Key is $($key)"
           Write-Host "$(Get-Date -f $timeStampFormat) - Replacing env appsettings file with encrypted one: In progress"
