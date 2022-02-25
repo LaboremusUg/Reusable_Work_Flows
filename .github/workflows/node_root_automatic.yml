@@ -59,7 +59,7 @@ jobs:
       env:
         CI: ""
         
-    - name: Create Distribution for ${{inputs.APP_NAME}}
+    - name: Create Distribution for ${{inputs.APP_NAME}} (LugTC)
       if: inputs.CLIENT_ENV == 'test'
       run: |
         echo "BUILDING FOR ${{inputs.CLIENT_ENV}}"
