@@ -52,17 +52,8 @@ jobs:
       run: npm install
       
     - name: Create Distribution for ${{inputs.APP_NAME}}
-      if: ${{ inputs.CLIENT_ENV != "test" }}
       run: |
         echo "BUILDING FOR ${{inputs.CLIENT_ENV}}"
-        npm run build-${{inputs.CLIENT}}-${{inputs.CLIENT_ENV}}
-      env:
-        CI: ""
-        
-    - name: Create Distribution for ${{inputs.APP_NAME}}
-      if: ${{ inputs.CLIENT_ENV }} == 'test'
-      run: |
-        echo "BUILDING FOR ${{inputs.ENVIRONMENT}}"
         npm run build-${{inputs.CLIENT_ENV}}
       env:
         CI: ""
