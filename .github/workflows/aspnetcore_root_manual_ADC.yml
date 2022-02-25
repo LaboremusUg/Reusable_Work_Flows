@@ -33,7 +33,7 @@ on:
         required: true
 jobs:
   Build-Package-IIS_Deploy:
-    runs-on: self-hosted
+    runs-on: windows-latest
     environment: 'Production'
     steps:
       - uses: actions/checkout@v2
