@@ -58,7 +58,7 @@ jobs:
         CI: ""
         
     - name: Create Distribution for ${{inputs.APP_NAME}}
-      if: ${{inputs.CLIENT_ENV}} = 'test'
+      if: ${{inputs.CLIENT_ENV}} == 'test'
       run: |
         echo "BUILDING FOR ${{inputs.ENVIRONMENT}}"
         npm run build-${{inputs.CLIENT_ENV}}
