@@ -75,7 +75,7 @@ jobs:
         run: |        
           cd ${{ env.DOTNET_ROOT}}\myapp
           Try {
-            Import-Module RepoCrypto
+            Import-Module -Name $HOME\Documents\WindowsPowerShell\Modules\RepoCrypto -Verbose
           } Catch {
             write-host "Failed to get RepoCrypto"
           }          
