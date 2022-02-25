@@ -74,13 +74,11 @@ jobs:
         shell: pwsh
         run: |        
           cd ${{ env.DOTNET_ROOT}}\myapp
-          try{
-          Import-Module RepoCrypto
-          } catch(e){
-          write-host "Failed to get RepoCrypto"
-          write-host e
-          }
-          
+          Try {
+            Import-Module RepoCrypto
+          } Catch {
+            write-host "Failed to get RepoCrypto"
+          }          
           $key = 'mMXkoLZEfBk='
           Write-Host "Your Key is $($key)"
           Write-Host "$(Get-Date -f $timeStampFormat) - Replacing env appsettings file with encrypted one: In progress"
