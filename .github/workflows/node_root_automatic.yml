@@ -52,7 +52,7 @@ jobs:
       run: npm install
       
     - name: Create Distribution for ${{inputs.APP_NAME}}
-      if: inputs.CLIENT_ENV != 'test' || inputs.CLIENT_ENV != 'staging' || inputs.CLIENT_ENV != 'Production'
+      if: inputs.CLIENT_ENV != 'test' && inputs.CLIENT_ENV != 'staging' && inputs.CLIENT_ENV != 'Production'
       run: |
         echo "BUILDING FOR ${{inputs.CLIENT_ENV}}"
         npm run build-${{inputs.CLIENT}}-${{inputs.CLIENT_ENV}}
