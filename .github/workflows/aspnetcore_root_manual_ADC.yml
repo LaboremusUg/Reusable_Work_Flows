@@ -14,22 +14,22 @@ on:
         type: string
       DOTNET_VERSION:
         type: string
-      WEBDEPLOY_USER: 
-        type: string
-      SERVER_IP:
-        type: string
-      SERVER_PORT:
-        type: string
       PROJECT_ROOT_DIRECTORY:
         type: string
       PROJECT_NAME:
         type: string
     secrets:
-      NUGET_URL:
+      NUGET_URL_pass:
         required: true
-      NUGET_TOKEN:
+      NUGET_TOKEN_pass:
         required: true
       WEBDEPLOY_PASSWORD:
+        required: true
+      WEBDEPLOY_USER:
+        required: true
+      SERVER_IP:
+        required: true
+      SERVER_PORT:
         required: true
 jobs:
   Build-Package-IIS_Deploy:
