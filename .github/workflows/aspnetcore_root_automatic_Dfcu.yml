@@ -15,9 +15,9 @@ on:
       PROJECT_NAME:
         type: string
     secrets:
-      NUGET_URL_pass:
+      NUGET_URL:
         required: true
-      NUGET_TOKEN_pass:
+      NUGET_TOKEN:
         required: true
       WEBDEPLOY_PASSWORD:
         required: true
