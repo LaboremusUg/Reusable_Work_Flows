@@ -49,7 +49,7 @@ jobs:
       - name: Build and publish ${{ inputs.PROJECT_ROOT_DIRECTORY }}
         if: inputs.PROJECT_ROOT_DIRECTORY == 'Dfcu_CAO_KycConnector_Service_Test'
         run: |
-          dotnet publish ${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}/myapp /p:EnvironmentName=${{inputs.CLIENT_ENV}}
+          dotnet publish ${{inputs.PROJECT_NAME}} --configuration Release -o ${{ env.DOTNET_ROOT}}/myapp /p:EnvironmentName=${{inputs.CLIENT_ENV}}
       
       - name: Clean appsettings
 
