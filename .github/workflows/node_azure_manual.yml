@@ -2,23 +2,13 @@ name: Root_manual_node_workflow
 on:
   workflow_call:
     inputs:
-      CLIENT:
-        type: string
       CLIENT_ENV:
         type: string
-      DOWNLOAD_PACKAGE:
-        type: string
-      DEPLOY_IIS:
-        type: string
-      SITE_NAME:
-        type: string   
       WEBDEPLOY_USER:
         type: string
       REPO_NAME:
         type: string
-      DIST_FOLDER:
-        type: string
-      COMPUTER_NAME:
+      BUILD_FOLDER:
         type: string
     secrets:
       WEBDEPLOY_PASSWORD:
@@ -39,31 +29,20 @@ jobs:
       run: npm install
 
     - name: Create Distribution for ${{inputs.APP_NAME}}
-      if: inputs.CLIENT_ENV != 'test' && inputs.CLIENT_ENV != 'staging' && inputs.CLIENT_ENV != 'Production'
-      run: |
-        echo "BUILDING FOR ${{inputs.CLIENT_ENV}}"
-        npm run build-${{inputs.CLIENT}}-${{inputs.CLIENT_ENV}}
-      env:
-        CI: ""
-        
-    - name: Create Distribution for ${{inputs.APP_NAME}} (LugTC)
-      if: inputs.CLIENT_ENV == 'test' || inputs.CLIENT_ENV == 'staging' || inputs.CLIENT_ENV == 'Production' || inputs.CLIENT_ENV == 'testLugtc'
-      run: |
-        echo "BUILDING FOR ${{inputs.CLIENT_ENV}}"
-        npm run build-${{inputs.CLIENT_ENV}}
+      run:  npm run build-${{inputs.CLIENT_ENV}}
       env:
         CI: ""
         
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
       with:
-        name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT }}-${{ inputs.CLIENT_ENV }}
-        path: ${{inputs.DIST_FOLDER}}
+        name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT_ENV }}
+        path: ${{inputs.BUILD_FOLDER}}
         
     - name: Download artifact from build job
       uses: actions/download-artifact@v2
       with:
-        name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT }}-${{ inputs.CLIENT_ENV }}
+        name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT_ENV }}
 
     - name: 'Deploy to Azure WebApp'
       id: deploy-to-webapp
@@ -71,5 +50,5 @@ jobs:
       with:
          app-name: ${{ inputs.AZURE_WEBAPP_NAME }}
          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-         package: ./${{inputs.REPO_NAME}}-${{ inputs.CLIENT }}-${{ inputs.CLIENT_ENV }}
+         package: ./${{inputs.REPO_NAME}}-${{ inputs.CLIENT_ENV }}
          slot-name: ${{ inputs.SLOT_NAME }}
