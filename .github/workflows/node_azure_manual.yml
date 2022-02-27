@@ -61,7 +61,6 @@ jobs:
         path: ${{inputs.DIST_FOLDER}}
         
     - name: Download artifact from build job
-      if: ${{ inputs.DOWNLOAD_PACKAGE == 'true' }}
       uses: actions/download-artifact@v2
       with:
         name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT }}-${{ inputs.CLIENT_ENV }}
