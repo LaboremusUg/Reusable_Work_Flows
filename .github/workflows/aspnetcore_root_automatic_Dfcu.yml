@@ -37,14 +37,20 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ inputs.DOTNET_VERSION }}
-          source-url: ${{ secrets.NUGET_URL_pass }}
+          source-url: ${{ secrets.NUGET_URL }}
         env:
-          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN_pass }}
+          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
           
       - name: Build and publish
+        if: inputs.PROJECT_ROOT_DIRECTORY != 'Dfcu_CAO_KycConnector_Service_Test'
         run: |
           dotnet publish ${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}/myapp /p:EnvironmentName=${{inputs.CLIENT_ENV}}
            
+      - name: Build and publish ${{ inputs.PROJECT_ROOT_DIRECTORY }}
+        if: inputs.PROJECT_ROOT_DIRECTORY == 'Dfcu_CAO_KycConnector_Service_Test'
+        run: |
+          dotnet publish ${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}/myapp /p:EnvironmentName=${{inputs.CLIENT_ENV}}
+      
       - name: Clean appsettings
 
         run: |
