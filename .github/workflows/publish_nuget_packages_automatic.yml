@@ -5,7 +5,7 @@ on:
     inputs:
       DOTNET_VERSION:
         type: string
-      inputs.PROJECT_NAME:
+      PROJECT_NAME:
         type: string
     secrets:
       NUGET_URL:
