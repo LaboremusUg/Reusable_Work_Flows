@@ -6,7 +6,7 @@ on:
       DOTNET_VERSION:
         type: string
       PROJECT_NAME:
-        required: true
+        type: string
     secrets:
       NUGET_URL:
         required: true
