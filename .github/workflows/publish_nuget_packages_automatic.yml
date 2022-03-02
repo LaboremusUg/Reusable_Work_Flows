@@ -1,59 +1,43 @@
-name: publish to nuget
+name: Push Nuget to Azure Artifacts
+
 on:
   workflow_call:
     inputs:
       DOTNET_VERSION:
         type: string
-      BUILD_CONFIGURATION:
-        type: string
+      PROJECT_NAME:
+        required: true
     secrets:
-      NUGET_API_KEY:
+      NUGET_URL:
         required: true
-      AZURE_ARTIFACTS_FEED_URL:
+      NUGET_TOKEN:
         required: true
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Checkout the repo
       - uses: actions/checkout@v2
 
-      # Setup .NET Core SDK
-      - name: Setup .NET Core
+      - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ inputs.DOTNET_VERSION }}
-
-      # Run dotnet build and package
-      - name: dotnet build and test
-        run: |
-          dotnet restore
-          dotnet build --configuration '${{ inputs.BUILD_CONFIGURATION }}'
-
-  az-artifacts-build-and-deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      # Checkout the repo
-      - uses: actions/checkout@v2
-
-      # Setup .NET Core SDK
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: ${{ inputs.DOTNET_VERSION }}
-          source-url: ${{ secrets.AZURE_ARTIFACTS_FEED_URL }}
+          source-url: ${{ secrets.NUGET_URL }}
         env:
-          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_API_KEY }} 
+          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
 
-      # Run dotnet build and package
-      - name: dotnet build and publish
+      - name: Restore
         run: |
-          dotnet restore
-          dotnet build --configuration '${{ inputs.BUILD_CONFIGURATION }}'
-          dotnet pack -c '${{ inputs.BUILD_CONFIGURATION }}' --version-suffix $GITHUB_RUN_ID
+          dotnet restore src/${{ PROJECT_NAME }}/${{ PROJECT_NAME }}.csproj
 
-      # Publish the package to Azure Artifacts
-      - name: 'dotnet publish'
-        run: dotnet nuget push --api-key AzureArtifacts bin/Release/*.nupkg
+      - name: Build
+        run: |
+          dotnet build --no-restore src/${{ PROJECT_NAME }}/${{ PROJECT_NAME }}.csproj -c Release
+
+      - name: Pack
+        run: |
+          dotnet pack src/${{ PROJECT_NAME }}/${{ PROJECT_NAME }}.csproj --no-restore -c Release
+
+      - name: Publish
+        run: |
+          dotnet nuget push --api-key AzureArtifacts src/${{ PROJECT_NAME }}/bin/Release/*.nupkg
