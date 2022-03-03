@@ -68,6 +68,7 @@ jobs:
             }   
           }
       - name: encrpt appsetting
+        if: inputs.CLIENT_ENV != "Test"
         shell: pwsh
         run: |
           git clone https://github.com/tmcoma/RepoCrypto.git "$HOME\Documents\WindowsPowerShell\Modules\RepoCrypto"
