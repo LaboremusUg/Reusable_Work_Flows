@@ -42,4 +42,4 @@ jobs:
 
       - name: Publish
         run: |
-          dotnet nuget push --api-key AzureArtifacts ${{ inputs.PROJECT_DIR }}/${{ inputs.PROJECT_NAME }}/bin/Release/*.nupkg
+          dotnet nuget push --api-key AzureArtifacts ${{ inputs.PROJECT_DIR }}/bin/Release/*.nupkg
