@@ -5,6 +5,8 @@ on:
     inputs:
       DOTNET_VERSION:
         type: string
+      PROJECT_DIR:
+        type: string
       PROJECT_NAME:
         type: string
     secrets:
@@ -28,16 +30,16 @@ jobs:
 
       - name: Restore
         run: |
-          dotnet restore src/${{ inputs.PROJECT_NAME }}/${{ inputs.PROJECT_NAME }}.csproj
+          dotnet restore ${{ inputs.PROJECT_DIR }}/${{ inputs.PROJECT_NAME }}.csproj
 
       - name: Build
         run: |
-          dotnet build --no-restore src/${{ inputs.PROJECT_NAME }}/${{ inputs.PROJECT_NAME }}.csproj -c Release
+          dotnet build --no-restore ${{ inputs.PROJECT_DIR }}/${{ inputs.PROJECT_NAME }}.csproj -c Release
 
       - name: Pack
         run: |
-          dotnet pack src/${{ inputs.PROJECT_NAME }}/${{ inputs.PROJECT_NAME }}.csproj --no-restore -c Release
+          dotnet pack ${{ inputs.PROJECT_DIR }}/${{ inputs.PROJECT_NAME }}.csproj --no-restore -c Release
 
       - name: Publish
         run: |
-          dotnet nuget push --api-key AzureArtifacts src/${{ inputs.PROJECT_NAME }}/bin/Release/*.nupkg
+          dotnet nuget push --api-key AzureArtifacts ${{ inputs.PROJECT_NAME }}/bin/Release/*.nupkg
