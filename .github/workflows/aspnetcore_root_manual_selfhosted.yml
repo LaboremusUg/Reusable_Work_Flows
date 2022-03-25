@@ -42,6 +42,10 @@ jobs:
           source-url: ${{ secrets.NUGET_URL }}
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
+          
+      - name: Run tests 🧪
+        run: dotnet test ${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
+          
       - name: Build and publish
         run: |
           dotnet build -c Release
