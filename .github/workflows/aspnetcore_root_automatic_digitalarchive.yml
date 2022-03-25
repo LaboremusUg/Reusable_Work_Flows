@@ -41,10 +41,12 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
           
-      - name: Build and publish
+      - name: Run tests 🧪
+        run: dotnet test ${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
+          
+      - name: Publish
         run: dotnet publish ${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}/app /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}
 
-        
       - name: Stop Application Pool
         shell: cmd
         run: '"C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:recycleApp -dest:recycleApp="${{ inputs.SITE_NAME }}",recycleMode="StopAppPool",computerName="https://${{ secrets.SERVER_IP }}:${{ secrets.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="LUG-TCAGENT\kevin",password="${{ secrets.WEBDEPLOY_PASSWORD }}",AuthType="Basic"'
