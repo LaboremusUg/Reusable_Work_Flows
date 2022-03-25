@@ -41,6 +41,9 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
           
+      - name: Run tests 🧪
+        run: dotnet test ${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
+          
       - name: Build and publish
         if: inputs.PROJECT_ROOT_DIRECTORY != 'Dfcu_CAO_KycConnector_Service_Test'
         run: |
