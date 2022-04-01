@@ -25,8 +25,11 @@ jobs:
         node-version: 14.x
         cache: 'npm'
         
-    - name: Install Node modules
+    - name: Install dependencies
       run: npm install
+      
+    - name: Run unit tests
+      run: npm run test
 
     - name: Create Distribution for ${{inputs.APP_NAME}}
       run:  npm run build-${{inputs.CLIENT_ENV}}
@@ -44,7 +47,7 @@ jobs:
       with:
         name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT_ENV }}
 
-    - name: 'Deploy to Azure WebApp'
+    - name: Deploy to Azure WebApp
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
       with:
