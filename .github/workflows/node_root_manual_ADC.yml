@@ -34,9 +34,13 @@ jobs:
       with:
         node-version: 14.x
         cache: 'npm'
-    - name: npm install and build
-      run: |
-        npm install
+    - name: Install dependencies
+      run: npm install
+        
+    - name: Run tests
+      run: npm run test
+      
+    - name: Build project
         npm run build-${{ inputs.CLIENT_ENV }}
       env:
         CI: ""
