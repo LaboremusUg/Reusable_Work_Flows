@@ -76,7 +76,7 @@ jobs:
           name: .net-app
           
       - name: Azure Login
-        uses: Azure/login@v1
+        uses: azure/login@v1
         with:
           creds: ${{ inputs.AZURE_CREDENTIALS }}
         
