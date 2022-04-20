@@ -44,8 +44,7 @@ jobs:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
           
       - name: Run tests 🧪
-        #run: dotnet test ${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
-        run: dotnet test ${{inputs.PROJECT_NAME}}Tests\${{inputs.PROJECT_NAME}}Tests.csproj
+        run: dotnet test ${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
           
       - name: Build and publish
         run: dotnet publish ${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}/app /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}
