@@ -4,14 +4,20 @@ on:
     inputs:
       CLIENT_ENV:
         type: string
-      WEBDEPLOY_USER:
+      AZURE_WEBAPP_NAME:
+        type: string
+      AZURE_WEBAPP_PACKAGE_PATH:
+        type: string
+      SLOT_NAME:
         type: string
       REPO_NAME:
         type: string
       BUILD_FOLDER:
         type: string
     secrets:
-      WEBDEPLOY_PASSWORD:
+      AZURE_WEBAPP_PUBLISH_PROFILE:
+        required: true
+      AZURE_CREDENTIALS:
         required: true
 
 jobs:
@@ -46,6 +52,11 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT_ENV }}
+        
+    - name: Azure Login
+      uses: Azure/login@v1.4.3
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Deploy to Azure WebApp
       id: deploy-to-webapp
