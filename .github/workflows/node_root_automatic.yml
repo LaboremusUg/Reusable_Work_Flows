@@ -51,8 +51,8 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
       run: npm install
       
-    - name: Run tests
-      run: npm run test
+    #- name: Run tests
+     # run: npm run test
       
     - name: Create Distribution for ${{inputs.APP_NAME}}
       if: inputs.CLIENT_ENV != 'test' && inputs.CLIENT_ENV != 'staging' && inputs.CLIENT_ENV != 'Production' && inputs.CLIENT_ENV != 'testLugtc'
