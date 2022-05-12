@@ -28,10 +28,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Create Distribution for ${{inputs.APP_NAME}}
-      run:  mkdir ${{inputs.BUILD_FOLDER}}
+      run:  mkdir ${{inputs.GITHUB_WORKSPACE}}/${{inputs.BUILD_FOLDER}}
       
     - name: copy * into ${{inputs.BUILD_FOLDER}}
-      run: copy ${{inputs.GITHUB_WORKSPACE}}/${{inputs.BUILD_FOLDER}} ${{inputs.BUILD_FOLDER}}
+      run: copy ${{inputs.GITHUB_WORKSPACE}} ${{inputs.GITHUB_WORKSPACE}}/${{inputs.BUILD_FOLDER}}
         
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
