@@ -12,6 +12,8 @@ on:
         type: string
       REPO_NAME:
         type: string
+      GITHUB_WORKSPACE:
+        type: string
       BUILD_FOLDER:
         type: string
     secrets:
@@ -29,7 +31,7 @@ jobs:
       run:  mkdir ${{inputs.BUILD_FOLDER}}
       
     - name: copy * into ${{inputs.BUILD_FOLDER}}
-      run: copy -a ${{GITHUB_WORKSPACE}}/${{inputs.BUILD_FOLDER}} ${{inputs.BUILD_FOLDER}}
+      run: copy -a ${{inputs.GITHUB_WORKSPACE}}/${{inputs.BUILD_FOLDER}} ${{inputs.BUILD_FOLDER}}
         
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
