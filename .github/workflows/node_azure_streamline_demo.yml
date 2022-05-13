@@ -12,8 +12,6 @@ on:
         type: string
       REPO_NAME:
         type: string
-      GITHUB_WORKSPACE:
-        type: string
       BUILD_FOLDER:
         type: string
     secrets:
@@ -26,13 +24,7 @@ jobs:
   Build-Package-IIS_Deploy:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Create Distribution for ${{inputs.APP_NAME}}
-      run:  mkdir ${{inputs.GITHUB_WORKSPACE}}/${{inputs.BUILD_FOLDER}}
-      
-    - name: copy * into ${{inputs.BUILD_FOLDER}}
-      run: copy ${{inputs.GITHUB_WORKSPACE}} ${{inputs.GITHUB_WORKSPACE}}/${{inputs.BUILD_FOLDER}}
-        
+    - uses: actions/checkout@v2   
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
       with:
