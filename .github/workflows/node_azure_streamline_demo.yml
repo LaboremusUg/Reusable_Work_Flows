@@ -35,6 +35,8 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT_ENV }}
+    - name: show folder content
+      run: ls
         
     - name: Azure Login
       uses: Azure/login@v1.4.3
