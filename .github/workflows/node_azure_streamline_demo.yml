@@ -35,8 +35,6 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT_ENV }}
-    - name: show folder content
-      run: ls
         
     - name: Azure Login
       uses: Azure/login@v1.4.3
@@ -49,5 +47,5 @@ jobs:
       with:
          app-name: ${{ inputs.AZURE_WEBAPP_NAME }}
          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-         package: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT_ENV }}
+         package: ./${{inputs.BUILD_FOLDER}}
          slot-name: ${{ inputs.SLOT_NAME }}
