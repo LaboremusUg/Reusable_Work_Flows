@@ -40,8 +40,8 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
           
-      - name: Run tests 🧪
-        run: dotnet test ${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
+      #- name: Run tests 🧪
+        #run: dotnet test ${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
           
       - name: Publish
         run: dotnet publish ${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}\myapp /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}
