@@ -61,6 +61,6 @@ jobs:
       env:
         CI: ""
         
-    #- name: Deploy
-    #  shell: cmd
-    #  run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="D:\a\${{inputs.REPO_NAME}}\${{inputs.REPO_NAME}}\${{inputs.DIST_FOLDER}}" -dest:contentPath="${{inputs.SITE_NAME}}",computerName="${{inputs.COMPUTER_NAME}}?site=${{inputs.SITE_NAME}}",username="${{inputs.WEBDEPLOY_USER}}",password="${{secrets.WEBDEPLOY_PASSWORD}}",authtype="Basic"'
+    name: Deploy
+      shell: cmd
+      run: 'msdeploy -verb:sync -allowUntrusted -source:contentPath="C:\Users\kevin\actions-runner\bou_auth_ui\Bou_Construo_AuthService_UserInterface\Bou_Construo_AuthService_UserInterface\dist" -dest:contentPath="LaboremusBank_Test",computerName="localhost",username="WebDeployUser",password="apples12",authtype="Basic"'
