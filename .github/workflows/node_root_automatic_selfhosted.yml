@@ -1,0 +1,66 @@
+# This is a basic workflow to help you get started with Actions
+
+name: NODE_CI/CD_ROOT_WORKFLOW
+
+on:
+  workflow_call:
+    inputs:
+      CLIENT:
+        type: string
+      CLIENT_ENV:
+        type: string
+      COMPUTER_NAME:
+        type: string
+      APP_NAME:
+        type: string
+      WEBDEPLOY_USER:
+        type: string
+      SITE_NAME:
+        type: string
+      DIST_FOLDER:
+        type: string
+      REPO_NAME:
+        type: string
+    secrets:
+      WEBDEPLOY_PASSWORD:
+        required: true
+        
+env:
+  NODE_VERSION: '12.x'
+
+jobs:
+  build-and-deploy:
+
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        
+    - name: Cache Node Modules
+      id: cache-node-modules
+      uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: node-modules-${{ hashFiles('package-lock.json') }}
+        
+    - name: Install Dependencies
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: npm install
+      
+    #- name: Run tests
+     # run: npm run test
+              
+    - name: Create Distribution for ${{inputs.APP_NAME}}
+      run: |
+        echo "BUILDING FOR ${{inputs.CLIENT_ENV}}"
+        npm run build-${{inputs.CLIENT_ENV}}
+      env:
+        CI: ""
+        
+    #- name: Deploy
+    #  shell: cmd
+    #  run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="D:\a\${{inputs.REPO_NAME}}\${{inputs.REPO_NAME}}\${{inputs.DIST_FOLDER}}" -dest:contentPath="${{inputs.SITE_NAME}}",computerName="${{inputs.COMPUTER_NAME}}?site=${{inputs.SITE_NAME}}",username="${{inputs.WEBDEPLOY_USER}}",password="${{secrets.WEBDEPLOY_PASSWORD}}",authtype="Basic"'
