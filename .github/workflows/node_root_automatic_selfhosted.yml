@@ -61,6 +61,5 @@ jobs:
       env:
         CI: ""
         
-      name: Deploy
-      shell: cmd
+    - name: Deploy
       run: 'msdeploy -verb:sync -allowUntrusted -source:contentPath="C:\Users\kevin\actions-runner\bou_auth_ui\Bou_Construo_AuthService_UserInterface\Bou_Construo_AuthService_UserInterface\dist" -dest:contentPath="LaboremusBank_Test",computerName="localhost",username="WebDeployUser",password="apples12",authtype="Basic"'
