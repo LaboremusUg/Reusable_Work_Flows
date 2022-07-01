@@ -34,8 +34,8 @@ jobs:
     - name: Install dependencies
       run: npm install
       
-    - name: Run unit tests
-      run: npm run test
+    #- name: Run unit tests
+      #run: npm run test
 
     - name: Create Distribution for ${{inputs.APP_NAME}}
       run:  npm run build-${{inputs.CLIENT_ENV}}
