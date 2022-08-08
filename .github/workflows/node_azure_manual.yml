@@ -45,13 +45,13 @@ jobs:
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
       with:
-        name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT_ENV }}
+        name: ${{inputs.BUILD_FOLDER}}
         path: ${{inputs.BUILD_FOLDER}}
         
     - name: Download artifact from build job
       uses: actions/download-artifact@v2
       with:
-        name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT_ENV }}
+        name: ${{inputs.BUILD_FOLDER}}
         
     - name: show content
       run: dir
@@ -67,5 +67,5 @@ jobs:
       with:
          app-name: ${{ inputs.AZURE_WEBAPP_NAME }}
          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-         package: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT_ENV }}
+         package: ${{inputs.BUILD_FOLDER}}
          slot-name: ${{ inputs.SLOT_NAME }}
