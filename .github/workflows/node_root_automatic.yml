@@ -24,6 +24,12 @@ on:
     secrets:
       WEBDEPLOY_PASSWORD:
         required: true
+      WEBDEPLOY_USER:
+        required: true
+      SERVER_IP:
+        required: true
+      SERVER_PORT:
+        required: true
         
 env:
   NODE_VERSION: '12.x'
@@ -72,4 +78,4 @@ jobs:
         
     - name: Deploy
       shell: cmd
-      run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="D:\a\${{inputs.REPO_NAME}}\${{inputs.REPO_NAME}}\${{inputs.DIST_FOLDER}}" -dest:contentPath="${{inputs.SITE_NAME}}",computerName="${{inputs.COMPUTER_NAME}}?site=${{inputs.SITE_NAME}}",username="${{inputs.WEBDEPLOY_USER}}",password="${{secrets.WEBDEPLOY_PASSWORD}}",authtype="Basic"'
+      run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="D:\a\${{inputs.REPO_NAME}}\${{inputs.REPO_NAME}}\${{inputs.DIST_FOLDER}}" -dest:contentPath="${{inputs.SITE_NAME}}",computerName="${{secrets.SERVER_IP}}:${{secrets.SERVER_PORT}}?site=${{inputs.SITE_NAME}}",username="${{secrets.WEBDEPLOY_USER}}",password="${{secrets.WEBDEPLOY_PASSWORD}}",authtype="Basic"'
