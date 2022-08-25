@@ -37,7 +37,7 @@ jobs:
     - name: Run unit tests
       run: npm run test
 
-    - name: Create Distribution for ${{inputs.APP_NAME}}
+    - name: Create Distribution
       run:  npm run build-${{inputs.CLIENT_ENV}}
       env:
         CI: ""
