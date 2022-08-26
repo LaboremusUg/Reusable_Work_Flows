@@ -28,14 +28,14 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: 14.x.x
+        node-version: 16
         cache: 'npm'
         
     - name: Install dependencies
-      run: npm install
+      run: npm ci
       
     - name: Run unit tests
-      run: npm run test
+      run: npm test
 
     - name: Create Distribution
       run:  npm run build-${{inputs.CLIENT_ENV}}
