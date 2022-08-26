@@ -22,7 +22,7 @@ on:
 
 jobs:
   Build-Package-IIS_Deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Set up Node.js
@@ -31,6 +31,9 @@ jobs:
         node-version: 14.x.x
         #cache: 'npm'
         
+    - name: Show version
+      run: npm --version
+      
     - name: Install dependencies
       run: npm install
       
