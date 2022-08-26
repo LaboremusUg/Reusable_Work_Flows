@@ -31,6 +31,9 @@ jobs:
         node-version: 14.x.x
         #cache: 'npm'
         
+    - name: Install the latest version of npm
+      run: npm install -g npm@latest
+        
     - name: Show version
       run: npm --version
       
