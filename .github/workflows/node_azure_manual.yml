@@ -1,4 +1,4 @@
-name: Root_manual_node_workflow
+name: Javascript
 on:
   workflow_call:
     inputs:
@@ -33,9 +33,6 @@ jobs:
         
     - name: Install the latest version of npm
       run: npm install -g npm@latest
-        
-    - name: Show version
-      run: npm --version
       
     - name: Install dependencies
       run: npm install
@@ -43,23 +40,12 @@ jobs:
     - name: Run unit tests
       run: npm test
 
-    - name: Create Distribution
+    - name: Build the application
       run:  npm run build-${{inputs.CLIENT_ENV}}
       env:
         CI: ""
         
-    - name: Upload artifact for deployment job
-      uses: actions/upload-artifact@v2
-      with:
-        name: ${{inputs.BUILD_FOLDER}}
-        path: ${{inputs.BUILD_FOLDER}}
-        
-    - name: Download artifact from build job
-      uses: actions/download-artifact@v2
-      with:
-        name: ${{inputs.BUILD_FOLDER}}
-        
-    - name: show content
+    - name: Show content
       run: dir
         
     - name: Azure Login
