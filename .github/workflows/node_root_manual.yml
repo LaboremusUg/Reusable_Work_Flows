@@ -28,7 +28,7 @@ on:
         required: true
 
 jobs:
-  Build-Package-Deploy:
+  Build-Package-Deploy:     #This job builds, packages and can also deploy to a laboremus environment
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
@@ -45,19 +45,19 @@ jobs:
     #  run: npm run test
 
     #This step creates a build for SFIs only
-    - name: Build
+    - name: Build (SFI)
       if: inputs.CLIENT_ENV != 'test' && inputs.CLIENT_ENV != 'staging' && inputs.CLIENT_ENV != 'Production'
       run: npm run build-${{inputs.CLIENT}}-${{inputs.CLIENT_ENV}}
       env:
         CI: ""
     
     #This step creates a build for one of the 4 laboremus environments 
-    - name: Build
+    - name: Build (Laboremus)
       if: inputs.CLIENT_ENV == 'test' || inputs.CLIENT_ENV == 'staging' || inputs.CLIENT_ENV == 'Production' || inputs.CLIENT_ENV == 'testLugtc'
       run: npm run build-${{inputs.CLIENT_ENV}}
       env:
         CI: ""
-
+    
     #Uploads the artifact so that it can be downloaded as a ZIP
     - name: Upload build artifact
       uses: actions/upload-artifact@v2
@@ -65,12 +65,6 @@ jobs:
         name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT }}-${{ inputs.CLIENT_ENV }}
         path: ${{inputs.DIST_FOLDER}}
         
-    - name: Download build artifact
-      if: ${{ inputs.DOWNLOAD_PACKAGE == 'true' }}
-      uses: actions/download-artifact@v2
-      with:
-        name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT }}-${{ inputs.CLIENT_ENV }}
-
     #Deploys application to the Laboremus Test environment if the deployment option is selected.
     - name: Deploy
       if: ${{ inputs.DEPLOY_IIS == 'true' }}
