@@ -30,7 +30,7 @@ on:
       SERVER_PORT:
         required: true
 jobs:
-  Build-Package-IIS_Deploy:
+  Build-Package-Deploy:
     runs-on: windows-latest
     environment: 'Production'
     steps:
@@ -43,7 +43,7 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
           
-      - name: Run tests 🧪
+      - name: Test 🧪
         run: dotnet test ${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
           
       - name: Build and publish
@@ -64,7 +64,6 @@ jobs:
               }     
             }   
           }
-
         
       - name: Stop Application Pool
         shell: cmd

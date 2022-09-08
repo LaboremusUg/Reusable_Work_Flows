@@ -1,0 +1,83 @@
+name: Create a build artifact OR deploy to the Laboremus Test environment.
+
+on:
+  workflow_call:
+    inputs:
+      CLIENT:
+        type: string
+      CLIENT_ENV:
+        type: string
+      AZURE_WEBAPP_NAME:
+        type: string
+      DOTNET_VERSION:
+        type: string
+      AZURE_WEBAPP_PACKAGE_PATH:
+        type: string
+      PROJECT_NAME: 
+        type: string
+      SLOT_NAME:
+        type: string
+    secrets:
+      NUGET_URL:
+        required: true
+      NUGET_TOKEN:
+        required: true
+      AZURE_WEBAPP_PUBLISH_PROFILE:
+        required: true
+      AZURE_CREDENTIALS:
+        required: true
+
+jobs:
+  Build-Deploy:
+    runs-on: windows-latest
+    environment: 'Production'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ inputs.DOTNET_VERSION }}
+          source-url: ${{ secrets.NUGET_URL }}
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
+          
+      - name: Test 🧪
+        run: dotnet test ${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
+          
+      - name: Publish
+        run: dotnet publish ${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}\myapp /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}
+      
+      #Removes appsettings files that are not for DFCU
+      - name: Delete unwanted files
+        run: |
+          cd ${{ env.DOTNET_ROOT}}/myapp
+          $jsonFiles = Get-ChildItem appsettings*json
+          foreach ($file in $jsonFiles) {
+            if ($file.Name -inotcontains "appsettings.json") {
+              if ($file.Name -inotcontains "appsettings.Config.json") {
+                if ($file.Name -inotcontains "appsettings.${{inputs.CLIENT_ENV}}.json"){
+                  #Write-Host -id 3 -activity "Removing File $($file.Name)" -Status "In progress"
+                  Write-Host "$(Get-Date -f $timeStampFormat) - Removing File $($file.Name): In progress"
+                  Remove-Item $file
+                }
+              }     
+            }   
+          }
+          cd ..
+        shell: pwsh
+          
+      - name: Login
+        uses: Azure/login@v1.4.3
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+      - name: Deploy
+        id: deploy-to-webapp 
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ inputs.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ${{env.DOTNET_ROOT}}/myapp
+          slot-name: ${{ inputs.SLOT_NAME }}
+          
+

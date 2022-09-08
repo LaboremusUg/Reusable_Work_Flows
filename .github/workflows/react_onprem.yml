@@ -1,6 +1,6 @@
 #This workflow is used for all on-premise IDV deployments
 
-name: Create a Javascript application build artifact OR deploy to the Laboremus Test environment.
+name: Create a build artifact OR deploy to the Laboremus Test environment.
 
 on:
   workflow_call:
