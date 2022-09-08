@@ -1,3 +1,5 @@
+#This workflow is used to deploy to all streamline JavaScript applications
+
 name: Deploy a Javascript application to the Azure cloud.
 
 on:
@@ -22,7 +24,7 @@ on:
         required: true
 
 jobs:
-  Build-and-Deploy:
+  Build-Deploy:     #This job builds and deploys to an azure web app
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
