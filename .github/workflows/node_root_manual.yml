@@ -64,12 +64,6 @@ jobs:
       with:
         name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT }}-${{ inputs.CLIENT_ENV }}
         path: ${{inputs.DIST_FOLDER}}
-        
-    - name: Download build artifact
-      if: ${{ inputs.DOWNLOAD_PACKAGE == 'true' }}
-      uses: actions/download-artifact@v2
-      with:
-        name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT }}-${{ inputs.CLIENT_ENV }}
 
     #Deploys application to the Laboremus Test environment if the deployment option is selected.
     - name: Deploy
