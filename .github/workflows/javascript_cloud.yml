@@ -1,4 +1,5 @@
-name: Root_manual_node_workflow
+name: Deploy a Javascript application to the Azure cloud.
+
 on:
   workflow_call:
     inputs:
@@ -21,31 +22,40 @@ on:
         required: true
 
 jobs:
-  Build-Package-IIS_Deploy:
-    runs-on: windows-latest
+  Build-and-Deploy:
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2   
-    - name: Upload artifact for deployment job
-      uses: actions/upload-artifact@v2
+    - uses: actions/checkout@v2
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
       with:
-        name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT_ENV }}
-        path: ${{inputs.BUILD_FOLDER}}
+        node-version: 14.x.x
+        #cache: 'npm'
         
-    - name: Download artifact from build job
-      uses: actions/download-artifact@v2
-      with:
-        name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT_ENV }}
+    - name: Install the latest npm version
+      run: npm install -g npm@latest
+      
+    - name: Install dependencies
+      run: npm install
+      
+    - name: Test
+      run: npm test
+
+    - name: Build
+      run:  npm run build-${{inputs.CLIENT_ENV}}
+      env:
+        CI: ""
         
-    - name: Azure Login
+    - name: Login
       uses: Azure/login@v1.4.3
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Deploy to Azure WebApp
+    - name: Deploy
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
       with:
          app-name: ${{ inputs.AZURE_WEBAPP_NAME }}
          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-         package: ./${{inputs.BUILD_FOLDER}}
+         package: ${{inputs.BUILD_FOLDER}}
          slot-name: ${{ inputs.SLOT_NAME }}

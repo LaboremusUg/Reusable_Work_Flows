@@ -1,0 +1,65 @@
+# This is a basic workflow to help you get started with Actions
+
+name: NODE_CI/CD_ROOT_WORKFLOW
+
+on:
+  workflow_call:
+    inputs:
+      CLIENT:
+        type: string
+      CLIENT_ENV:
+        type: string
+      COMPUTER_NAME:
+        type: string
+      APP_NAME:
+        type: string
+      WEBDEPLOY_USER:
+        type: string
+      SITE_NAME:
+        type: string
+      DIST_FOLDER:
+        type: string
+      REPO_NAME:
+        type: string
+    secrets:
+      WEBDEPLOY_PASSWORD:
+        required: true
+        
+env:
+  NODE_VERSION: '12.x'
+
+jobs:
+  build-and-deploy:
+
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        
+    - name: Cache Node Modules
+      id: cache-node-modules
+      uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: node-modules-${{ hashFiles('package-lock.json') }}
+        
+    - name: Install Dependencies
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: npm install
+      
+    #- name: Run tests
+     # run: npm run test
+              
+    - name: Create Distribution for ${{inputs.APP_NAME}}
+      run: |
+        echo "BUILDING FOR ${{inputs.CLIENT_ENV}}"
+        npm run build-${{inputs.CLIENT_ENV}}
+      env:
+        CI: ""
+        
+    - name: Deploy
+      run: 'msdeploy -verb:sync -allowUntrusted -source:contentPath="C:\Users\kevin\actions-runner\bou_auth_ui\Bou_Construo_AuthService_UserInterface\Bou_Construo_AuthService_UserInterface\dist" -dest:contentPath="LaboremusBank_Test",computerName="localhost",username="WebDeployUser",password="apples12",authtype="Basic"'
