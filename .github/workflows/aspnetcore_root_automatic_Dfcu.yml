@@ -44,11 +44,10 @@ jobs:
       #- name: Run tests 🧪
        # run: dotnet test ${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
           
-      - name: Build and publish
+      - name: Publish
         run: dotnet publish ${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}/myapp /p:EnvironmentName=${{inputs.CLIENT_ENV}}
        
       - name: Clean appsettings
-
         run: |
           cd ${{ env.DOTNET_ROOT}}/myapp
           $jsonFiles = Get-ChildItem appsettings*json
@@ -63,7 +62,8 @@ jobs:
               }     
             }   
           }
-      - name: encrpt appsetting
+          
+      - name: Encrpt config file
         if: inputs.CLIENT_ENV != 'Test'
         shell: pwsh
         run: |
@@ -79,4 +79,4 @@ jobs:
 
       - name: Deploy to an IIS webserver
         shell: cmd
-        run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="${{ env.DOTNET_ROOT}}/myapp" -dest:contentPath="${{ inputs.SITE_NAME }}",computerName="{{ secrets.SERVER_IP }}:${{ secrets.SERVER_PORT }}",username="${{ secrets.WEBDEPLOY_USER }}",password="${{ secrets.WEBDEPLOY_PASSWORD }}",authtype="Basic"'  
+        run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="${{ env.DOTNET_ROOT}}/myapp" -dest:contentPath="${{ inputs.SITE_NAME }}",computerName="https://{{ secrets.SERVER_IP }}:${{ secrets.SERVER_PORT }}",username="${{ secrets.WEBDEPLOY_USER }}",password="${{ secrets.WEBDEPLOY_PASSWORD }}",authtype="Basic"'  
