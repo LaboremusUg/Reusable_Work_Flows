@@ -28,9 +28,9 @@ on:
         required: true
 
 jobs:
+    steps:
   Build-Package-Deploy:     #This job builds, packages and can also deploy to a laboremus environment
     runs-on: windows-latest
-    steps:
     - uses: actions/checkout@v2
     - name: Set up Node.js
       uses: actions/setup-node@v2
@@ -60,6 +60,7 @@ jobs:
     
     #Uploads the artifact so that it can be downloaded as a ZIP
     - name: Upload build artifact
+      if: ${{ inputs.DOWNLOAD_PACKAGE == 'true' }}
       uses: actions/upload-artifact@v2
       with:
         name: ${{inputs.REPO_NAME}}-${{ inputs.CLIENT }}-${{ inputs.CLIENT_ENV }}
