@@ -99,7 +99,17 @@ jobs:
           name: 'PACKAGE_${{ inputs.PROJECT_ROOT_DIRECTORY }}'
           path: '${{ env.DOTNET_ROOT}}/myapp'
 
+      - name: Stop Application Pool
+        if: ${{ inputs.DEPLOY_IIS == 'true' }}
+        shell: pwsh
+        run: StopWebAppPool -Name "${{ inputs.SITE_NAME }}"
+
       - name: Deploy
         if: ${{ inputs.DEPLOY_IIS == 'true' }}
         shell: cmd
         run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="${{ env.DOTNET_ROOT}}/myapp" -dest:contentPath="${{ inputs.SITE_NAME }}",computerName="https://${{ secrets.SERVER_IP }}:${{ secrets.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="${{ secrets.WEBDEPLOY_USER }}",password="${{ secrets.WEBDEPLOY_PASSWORD }}",authtype="Basic"'
+
+      - name: Start Application Pool
+        if: ${{ inputs.DEPLOY_IIS == 'true' }}
+        shell: pwsh
+        run: StartWebAppPool -Name "${{ inputs.SITE_NAME }}"
