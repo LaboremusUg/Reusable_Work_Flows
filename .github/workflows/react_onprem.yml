@@ -7,20 +7,28 @@ on:
     inputs:
       CLIENT:
         type: string
+        required: true
       CLIENT_ENV:
         type: string
+        required: true
       DOWNLOAD_PACKAGE:
         type: string
+        required: true
       DEPLOY_IIS:
         type: string
+        required: true
       SITE_NAME:
         type: string   
+        required: true
       WEBDEPLOY_USER:
         type: string
+        required: true
       REPO_NAME:
         type: string
+        required: true
       DIST_FOLDER:
         type: string
+        required: true
     secrets:
       WEBDEPLOY_PASSWORD:
         required: true

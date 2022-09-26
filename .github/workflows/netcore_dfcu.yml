@@ -5,24 +5,31 @@ on:
     inputs:
       CLIENT:
         type: string
+        required: true
       CLIENT_ENV:
         type: string
+        required: true
       DOWNLOAD_PACKAGE:
         type: string
+        required: true
       DEPLOY_IIS:
         type: string
+        required: true
       SITE_NAME:
         type: string
+        required: true
       DOTNET_VERSION:
         type: string
+        required: true
       PROJECT_ROOT_DIRECTORY:
         type: string
+        required: true
       PROJECT_NAME:
         type: string
+        required: true
       ENCRYPT:
         type: string
-      DOWNLOAD_PACKAGE:
-        type: string
+        required: true
     secrets:
       NUGET_URL:
         required: true
