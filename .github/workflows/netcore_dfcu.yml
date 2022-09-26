@@ -3,9 +3,6 @@ name: Create a build artifact OR deploy to the Laboremus Test environment.
 on:
   workflow_call:
     inputs:
-      CLIENT:
-        type: string
-        required: true
       CLIENT_ENV:
         type: string
         required: true
