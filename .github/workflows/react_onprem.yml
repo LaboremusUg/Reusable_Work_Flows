@@ -20,9 +20,6 @@ on:
       SITE_NAME:
         type: string   
         required: true
-      WEBDEPLOY_USER:
-        type: string
-        required: true
       REPO_NAME:
         type: string
         required: true
