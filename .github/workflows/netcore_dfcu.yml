@@ -21,6 +21,8 @@ on:
         type: string
       ENCRYPT:
         type: string
+      DOWNLOAD_PACKAGE:
+        type: string
     secrets:
       NUGET_URL:
         required: true
@@ -87,6 +89,7 @@ jobs:
 
       #Creates a ZIP artifact that can be downloaded
       - name: Upload Artifact
+        if: ${{ inputs.DOWNLOAD_PACKAGE == 'true' }}
         uses: actions/upload-artifact@v2.3.1
         with:
           name: 'PACKAGE_${{ inputs.PROJECT_ROOT_DIRECTORY }}'
