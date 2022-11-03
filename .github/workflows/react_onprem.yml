@@ -26,6 +26,9 @@ on:
       DIST_FOLDER:
         type: string
         required: true
+      COMPUTER_NAME:
+        type: string
+        required: false
     secrets:
       WEBDEPLOY_PASSWORD:
         required: true
