@@ -44,7 +44,7 @@ jobs:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
 
       - name: Checkout commit
-        run: git checkout ${{ inputs.COMMIT_NUMBER }}
+        run: git checkout ${{ secrets.COMMIT_NUMBER }}
           
       #- name: Test 🧪
        # run: dotnet test ${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
