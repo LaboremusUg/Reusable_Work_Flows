@@ -58,7 +58,6 @@ jobs:
       - name: Publish
         run: dotnet publish ${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}\myapp /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}
       
-      #Removes appsettings files that are not for DFCU
       - name: Remove appsettings files
         run: |
           cd ${{ env.DOTNET_ROOT}}/myapp
@@ -91,7 +90,6 @@ jobs:
           Write-Host "$(Get-Date -f $timeStampFormat) - Replacing env appsettings file with encrypted one: In progress"
           Protect-File "appsettings.${{inputs.CLIENT_ENV}}.json" -Algorithm DES -KeyAsPlainText $key -RemoveSource
 
-      #Creates a ZIP artifact that can be downloaded
       - name: Upload Artifact
         if: ${{ inputs.DOWNLOAD_PACKAGE == 'true' }}
         uses: actions/upload-artifact@v2.3.1
@@ -116,7 +114,6 @@ jobs:
       #   shell: cmd
       #   run: '"C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:recycleApp -dest:recycleApp="${{ inputs.SITE_NAME }}",recycleMode="StartAppPool",computerName="https://${{ secrets.SERVER_IP }}:${{ secrets.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="LUG-TCAGENT\kevin",password="${{ secrets.WEBDEPLOY_PASSWORD }}",AuthType="Basic"'
 
-          
       - name: Login
         if: ${{ inputs.DEPLOY_AZURE == 'true' }}
         uses: Azure/login@v1.4.3
