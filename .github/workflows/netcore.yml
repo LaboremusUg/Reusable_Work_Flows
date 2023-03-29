@@ -27,17 +27,17 @@ on:
         type: string
     secrets:
       NUGET_URL:
-        required: true
+        required: false
       NUGET_TOKEN:
-        required: true
+        required: false
       AZURE_WEBAPP_PUBLISH_PROFILE:
-        required: true
+        required: false
       AZURE_CREDENTIALS:
-        required: true
+        required: false
       SERVER_IP:
-        required: true
+        required: false
       SERVER_PORT:
-        required: true
+        required: false
 jobs:
   Build-Deploy:
     runs-on: windows-latest
@@ -59,7 +59,7 @@ jobs:
         run: dotnet publish ${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}\myapp /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}
       
       #Removes appsettings files that are not for DFCU
-      - name: Delete unwanted files
+      - name: Remove appsettings files
         run: |
           cd ${{ env.DOTNET_ROOT}}/myapp
           $jsonFiles = Get-ChildItem appsettings*json
