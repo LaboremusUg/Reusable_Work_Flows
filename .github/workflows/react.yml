@@ -1,0 +1,115 @@
+name: Build and deploy an ReactJS application
+
+on:
+  workflow_call:
+    inputs:
+      CLIENT:
+        type: string
+        required: true
+      CLIENT_ENV:
+        type: string
+        required: true
+      DOWNLOAD_PACKAGE:
+        type: string
+        required: true
+      DEPLOY_IIS:
+        type: string
+        required: true
+      SITE_NAME:
+        type: string   
+        required: true
+      REPO_NAME:
+        type: string
+        required: true
+      DIST_FOLDER:
+        type: string
+        required: true
+      COMPUTER_NAME:
+        type: string
+        required: false
+      AZURE_WEBAPP_NAME:
+        type: string
+      AZURE_WEBAPP_PACKAGE_PATH:
+        type: string
+      SLOT_NAME:
+        type: string
+      DEPLOY_IIS:
+        type: string
+      DEPLOY_AZURE:
+        type: string
+    secrets:    
+      AZURE_WEBAPP_PUBLISH_PROFILE:
+        required: false
+      AZURE_CREDENTIALS:
+        required: false
+      WEBDEPLOY_PASSWORD:
+        required: false
+      WEBDEPLOY_USER:
+        required: false
+      SERVER_IP:
+        required: false
+      SERVER_PORT:
+        required: false
+
+jobs:
+  Build-Package-Deploy:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14.x
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm install
+      
+    #- name: Test
+    #  run: npm run test
+
+    - name: Build artifact for a SFI
+      if: inputs.CLIENT_ENV != 'test' && inputs.CLIENT_ENV != 'staging' && inputs.CLIENT_ENV != 'Production'
+      run: npm run build-${{inputs.CLIENT}}-${{inputs.CLIENT_ENV}}
+      env:
+        CI: ""
+    
+    - name: Build artifact for Laboremus
+      if: inputs.CLIENT_ENV == 'test' || inputs.CLIENT_ENV == 'staging' || inputs.CLIENT_ENV == 'Production' || inputs.CLIENT_ENV == 'testLugtc'
+      run: npm run build-${{inputs.CLIENT_ENV}}
+      env:
+        CI: ""
+    
+    - name: Upload build artifact
+      if: ${{ inputs.DOWNLOAD_PACKAGE == 'true' }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{github.event.repository.name}}-${{ inputs.CLIENT }}-${{ inputs.CLIENT_ENV }}
+        path: ${{inputs.DIST_FOLDER}}
+        
+    - name: Deploy with WebDeploy
+      if: ${{ inputs.DEPLOY_IIS == 'true' }}
+      shell: cmd
+      run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="D:\a\${{github.event.repository.name}}\${{github.event.repository.name}}\${{inputs.DIST_FOLDER}}" -dest:contentPath="${{inputs.SITE_NAME}}",computerName="https://${{secrets.SERVER_IP}}:${{secrets.SERVER_PORT}}/msdeploy.axd?site=${{inputs.SITE_NAME}}",username="${{secrets.WEBDEPLOY_USER}}",password="${{secrets.WEBDEPLOY_PASSWORD}}",authtype="Basic"'
+
+    - name: Login to Azure
+      if: ${{ inputs.DEPLOY_AZURE == 'true' }}
+      uses: Azure/login@v1.4.3
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Deploy with Azure Action
+      if: ${{ inputs.DEPLOY_AZURE == 'true' }}
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v2
+      with:
+         app-name: ${{ inputs.AZURE_WEBAPP_NAME }}
+         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+         package: ${{inputs.BUILD_FOLDER}}
+         slot-name: ${{ inputs.SLOT_NAME }}
+
+
+
+
+
