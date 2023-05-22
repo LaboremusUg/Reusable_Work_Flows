@@ -16,6 +16,8 @@ on:
       PROJECT_NAME: 
         type: string        
       DIR_NAME: 
+        type: string     
+      SITE_NAME: 
         type: string
       SLOT_NAME:
         type: string
