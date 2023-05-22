@@ -63,10 +63,10 @@ jobs:
       #- name: Test 🧪
        # run: dotnet test ${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
                   
-        #Publish method for vertical slice architecture
-      - name: Publish      
-        if: ${{ inputs.DIR_NAME != 'src' }}
-        run: dotnet publish ${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}\myapp /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}
+#         #Publish method for vertical slice architecture
+#       - name: Publish      
+#         if: ${{ inputs.DIR_NAME != 'src' }}
+#         run: dotnet publish ${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}\myapp /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}
         
         #Publish method for clean architecture
       - name: Publish
