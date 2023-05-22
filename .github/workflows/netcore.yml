@@ -39,6 +39,10 @@ on:
       SERVER_IP:
         required: false
       SERVER_PORT:
+        required: false        
+      WEBDEPLOY_PASSWORD:
+        required: false
+      WEBDEPLOY_USER:
         required: false
 jobs:
   Build-Deploy:
