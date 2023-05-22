@@ -70,7 +70,6 @@ jobs:
         
         #Publish method for clean architecture
       - name: Publish
-        if: ${{ inputs.DIR_NAME == 'src' }}
         run: dotnet publish ${{inputs.DIR_NAME}}\${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}\myapp /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}
       
       - name: Remove appsettings files
