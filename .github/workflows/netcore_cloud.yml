@@ -13,6 +13,8 @@ on:
         type: string
       AZURE_WEBAPP_PACKAGE_PATH:
         type: string
+      DIR_NAME: 
+        type: string
       PROJECT_NAME: 
         type: string
       SLOT_NAME:
@@ -45,7 +47,7 @@ jobs:
        # run: dotnet test ${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
           
       - name: Publish
-        run: dotnet publish ${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}\myapp /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}
+        run: dotnet publish ${{inputs.DIR_NAME}}\${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}\myapp /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}
       
       #Removes appsettings files that are not for DFCU
       - name: Delete unwanted files
