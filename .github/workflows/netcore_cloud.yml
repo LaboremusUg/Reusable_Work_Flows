@@ -45,13 +45,13 @@ jobs:
           
       # Run analyzers
       - name: Run Microsoft Security DevOps Analysis
-        if: ${{ inputs.DOTNET_VERSION != 5.0 }}
+        if: ${{ inputs.DOTNET_VERSION != 5.x.x }}
         uses: microsoft/security-devops-action@preview
         id: msdo
 
       # Upload alerts to the Security tab
       - name: Upload alerts to Security tab
-        if: ${{ inputs.DOTNET_VERSION != 5.0 }}
+        if: ${{ inputs.DOTNET_VERSION != 5.x.x }}
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: ${{ steps.msdo.outputs.sarifFile }}
