@@ -49,12 +49,12 @@ jobs:
         uses: microsoft/security-devops-action@preview
         id: msdo
 
-      # Upload alerts to the Security tab
-      - name: Upload alerts to Security tab
-        if: ${{ startsWith(inputs.DOTNET_VERSION, '6.') || startsWith(inputs.DOTNET_VERSION, '7.') }}
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: ${{ steps.msdo.outputs.sarifFile }}
+#       Upload alerts to the Security tab
+#       - name: Upload alerts to Security tab
+#         if: ${{ startsWith(inputs.DOTNET_VERSION, '6.') || startsWith(inputs.DOTNET_VERSION, '7.') }}
+#         uses: github/codeql-action/upload-sarif@v2
+#         with:
+#           sarif_file: ${{ steps.msdo.outputs.sarifFile }}
           
       #- name: Test 🧪
       #  run: dotnet test ${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
