@@ -43,8 +43,19 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
           
+      # Run analyzers
+      - name: Run Microsoft Security DevOps Analysis
+        uses: microsoft/security-devops-action@preview
+        id: msdo
+
+      # Upload alerts to the Security tab
+      - name: Upload alerts to Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: ${{ steps.msdo.outputs.sarifFile }}
+          
       #- name: Test 🧪
-       # run: dotnet test ${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
+      #  run: dotnet test ${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
           
       - name: Publish
         run: dotnet publish ${{inputs.DIR_NAME}}\${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}\myapp /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}
