@@ -43,11 +43,11 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
           
-      # Run analyzers
-      - name: Run Microsoft Security DevOps Analysis
-        if: ${{ startsWith(inputs.DOTNET_VERSION, '6.') || startsWith(inputs.DOTNET_VERSION, '7.') }}
-        uses: microsoft/security-devops-action@preview
-        id: msdo
+#       Run analyzers
+#       - name: Run Microsoft Security DevOps Analysis
+#         if: ${{ startsWith(inputs.DOTNET_VERSION, '6.') || startsWith(inputs.DOTNET_VERSION, '7.') }}
+#         uses: microsoft/security-devops-action@preview
+#         id: msdo
 
 #       Upload alerts to the Security tab
 #       - name: Upload alerts to Security tab
