@@ -41,7 +41,7 @@ jobs:
           dotnet-version: ${{ inputs.DOTNET_VERSION }}
           source-url: ${{ secrets.NUGET_URL }}
         env:
-          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}s.NUGET_URL }} -username "Laboremus" -password ${{ secrets.NUGET_TOKEN }}
+          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}s.NUGET_URL }}
           
           
 #       Run analyzers
