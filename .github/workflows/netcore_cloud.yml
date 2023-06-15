@@ -37,9 +37,12 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ inputs.DOTNET_VERSION }}
-          source-url: ${{ secrets.NUGET_URL }}
-        env:
-          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
+#           source-url: ${{ secrets.NUGET_URL }}
+#         env:
+#           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
+
+      - name: Add Azure Artifacts Nuget Source
+        run: nuget sources add -name LugNuGetFeed -source ${{ secrets.NUGET_URL }} -username "Laboremus" -password ${{ secrets.NUGET_TOKEN }}
           
       #- name: Test 🧪
        # run: dotnet test ${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
