@@ -1,4 +1,4 @@
-name: Create a build artifact OR deploy to the Laboremus Test environment.
+name: DotNet CI/CD Cloud Pipeline
 
 on:
   workflow_call:
@@ -43,28 +43,14 @@ jobs:
       - name: Add Azure Artifacts Nuget Source
         run: nuget sources add -name LugNuGetFeed -source ${{ secrets.NUGET_URL }} -username "Laboremus" -password ${{ secrets.NUGET_TOKEN }}
           
+#       - name: Run unit tests 🧪
+#         run: dotnet test ${{inputs.DIR_NAME}}\${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
           
-#       Run analyzers
-#       - name: Run Microsoft Security DevOps Analysis
-#         if: ${{ startsWith(inputs.DOTNET_VERSION, '6.') || startsWith(inputs.DOTNET_VERSION, '7.') }}
-#         uses: microsoft/security-devops-action@preview
-#         id: msdo
-
-#       Upload alerts to the Security tab
-#       - name: Upload alerts to Security tab
-#         if: ${{ startsWith(inputs.DOTNET_VERSION, '6.') || startsWith(inputs.DOTNET_VERSION, '7.') }}
-#         uses: github/codeql-action/upload-sarif@v2
-#         with:
-#           sarif_file: ${{ steps.msdo.outputs.sarifFile }}
-          
-#       - name: Test 🧪
-#         run: dotnet test ${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
-          
-      - name: Publish
+      - name: Restore, build & create a release
         run: dotnet publish ${{inputs.DIR_NAME}}\${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}\myapp /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}} 
       
-#       Removes appsettings files that are not for DFCU
-      - name: Delete unwanted files
+      - name: Delete Appsettings files for other environments      
+        shell: pwsh
         run: |
           cd ${{ env.DOTNET_ROOT}}/myapp
           $jsonFiles = Get-ChildItem appsettings*json
@@ -80,14 +66,13 @@ jobs:
             }   
           }
           cd ..
-        shell: pwsh
           
-      - name: Login
+      - name: Authenticate/Login to Azure
         uses: Azure/login@v1.4.3
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
         
-      - name: Deploy
+      - name: Deploy the application to an Azure App Service
         id: deploy-to-webapp 
         uses: azure/webapps-deploy@v2
         with:
