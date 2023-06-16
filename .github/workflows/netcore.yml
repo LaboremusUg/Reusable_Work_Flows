@@ -57,6 +57,12 @@ jobs:
         with:
           dotnet-version: ${{ inputs.DOTNET_VERSION }}
 
+      - name: Remove Azure Artifacts Nuget Source
+        if: always()
+        continue-on-error: true
+        run: |
+          dotnet nuget remove source LugNuGetFeed 
+          
       - name: Add Azure Artifacts Nuget Source
         run: nuget sources add -name LugNuGetFeed -source ${{ secrets.NUGET_URL }} -username "Laboremus" -password ${{ secrets.NUGET_TOKEN }}
           
