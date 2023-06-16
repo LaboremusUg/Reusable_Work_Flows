@@ -53,7 +53,7 @@ jobs:
         if: always()
         continue-on-error: true
         run: |
-          dotnet nuget remove source LugNugetFeed 
+          dotnet nuget remove source LugNuGetFeed 
       
       - name: Delete Appsettings files for other environments      
         shell: pwsh
