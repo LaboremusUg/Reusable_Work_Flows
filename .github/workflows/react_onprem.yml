@@ -59,14 +59,14 @@ jobs:
 
     #This step creates a build for SFIs only
     - name: Build (SFI)
-      if: inputs.CLIENT_ENV != 'test' && inputs.CLIENT_ENV != 'staging' && inputs.CLIENT_ENV != 'Production'
+      if: inputs.CLIENT_ENV != 'test' && inputs.CLIENT_ENV != 'staging' && inputs.CLIENT_ENV != 'Production' && inputs.CLIENT_ENV != 'onprem'
       run: npm run build-${{inputs.CLIENT}}-${{inputs.CLIENT_ENV}}
       env:
         CI: ""
     
     #This step creates a build for one of the 4 laboremus environments 
     - name: Build (Laboremus)
-      if: inputs.CLIENT_ENV == 'test' || inputs.CLIENT_ENV == 'staging' || inputs.CLIENT_ENV == 'Production' || inputs.CLIENT_ENV == 'testLugtc'
+      if: inputs.CLIENT_ENV == 'test' || inputs.CLIENT_ENV == 'staging' || inputs.CLIENT_ENV == 'Production' || inputs.CLIENT_ENV == 'testLugtc' || inputs.CLIENT_ENV == 'onprem'
       run: npm run build-${{inputs.CLIENT_ENV}}
       env:
         CI: ""
