@@ -1,0 +1,65 @@
+#This workflow is used to deploy to all streamline JavaScript applications
+
+name: Deploy a Javascript application to the Azure cloud.
+
+on:
+  workflow_call:
+    inputs:
+      CLIENT_ENV:
+        type: string
+      AZURE_WEBAPP_NAME:
+        type: string
+      AZURE_WEBAPP_PACKAGE_PATH:
+        type: string
+      SLOT_NAME:
+        type: string
+      REPO_NAME:
+        type: string
+      BUILD_FOLDER:
+        type: string
+    secrets:
+      AZURE_WEBAPP_PUBLISH_PROFILE:
+        required: true
+      AZURE_CREDENTIALS:
+        required: true
+
+jobs:
+  Build-Deploy:     #This job builds and deploys to an azure web app
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14.x.x
+        #cache: 'npm'
+        
+    - name: Install the latest npm version
+      run: npm install -g npm@latest
+    - name: Clear Cache
+      run: npm cache clean --force
+      
+    - name: Install dependencies
+      run: npm install
+      
+    - name: Test
+      run: npm test
+
+    - name: Build
+      run:  npm run build-${{inputs.CLIENT_ENV}}
+      env:
+        CI: ""
+        
+    - name: Login
+      uses: Azure/login@v1.4.3
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Deploy
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v2
+      with:
+         app-name: ${{ inputs.AZURE_WEBAPP_NAME }}
+         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+         package: ${{inputs.BUILD_FOLDER}}
+         slot-name: ${{ inputs.SLOT_NAME }}
