@@ -46,8 +46,8 @@ jobs:
  #       run: |
  #         dotnet nuget remove source LugNuGetFeed 
 
-      - name: Add Azure Artifacts Nuget Source
-        run: nuget sources add -name LugNuGetFeed -source ${{ secrets.NUGET_URL }} -username "Laboremus" -password ${{ secrets.NUGET_TOKEN }}
+#      - name: Add Azure Artifacts Nuget Source
+#        run: nuget sources add -name LugNuGetFeed -source ${{ secrets.NUGET_URL }} -username "Laboremus" -password ${{ secrets.NUGET_TOKEN }}
           
 #       - name: Run unit tests 🧪
 #         run: dotnet test ${{inputs.DIR_NAME}}\${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
