@@ -53,7 +53,7 @@ jobs:
 #         run: dotnet test ${{inputs.DIR_NAME}}\${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
           
       - name: Restore, build & create a release
-        run: dotnet publish ${{inputs.DIR_NAME}}\${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}\myapp /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}} -s https://pkgs.dev.azure.com/laboremus-uganda/LUG/_packaging/LugNuGetFeed/nuget/v3/index.json 
+        run: dotnet publish ${{inputs.DIR_NAME}}\${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}\myapp /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}} --source https://pkgs.dev.azure.com/laboremus-uganda/LUG/_packaging/LugNuGetFeed/nuget/v3/index.json 
       
       - name: Remove Azure Artifacts Nuget Source
         if: always()
