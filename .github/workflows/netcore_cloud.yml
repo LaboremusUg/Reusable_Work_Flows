@@ -40,26 +40,26 @@ jobs:
         with:
           dotnet-version: ${{ inputs.DOTNET_VERSION }}
           
- #     - name: Remove Azure Artifacts Nuget Source
- #       if: always()
- #       continue-on-error: true
- #       run: |
- #         dotnet nuget remove source LugNuGetFeed 
+      - name: Remove Azure Artifacts Nuget Source
+        if: always()
+        continue-on-error: true
+        run: |
+          dotnet nuget remove source LugNuGetFeed 
 
-#      - name: Add Azure Artifacts Nuget Source
-#        run: nuget sources add -name LugNuGetFeed -source ${{ secrets.NUGET_URL }} -username "Laboremus" -password ${{ secrets.NUGET_TOKEN }}
+      - name: Add Azure Artifacts Nuget Source
+        run: nuget sources add -name LugNuGetFeed -source ${{ secrets.NUGET_URL }} -username "Laboremus" -password ${{ secrets.NUGET_TOKEN }}
           
 #       - name: Run unit tests 🧪
 #         run: dotnet test ${{inputs.DIR_NAME}}\${{inputs.PROJECT_NAME}}.Tests\${{inputs.PROJECT_NAME}}.Tests.csproj
           
       - name: Restore, build & create a release
-        run: dotnet publish ${{inputs.DIR_NAME}}\${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}\myapp /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}} 
+        run: dotnet publish ${{inputs.DIR_NAME}}\${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}\myapp /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}} -s https://pkgs.dev.azure.com/laboremus-uganda/LUG/_packaging/LugNuGetFeed/nuget/v3/index.json 
       
- #     - name: Remove Azure Artifacts Nuget Source
- #       if: always()
- #       continue-on-error: true
- #       run: |
- #         dotnet nuget remove source LugNuGetFeed 
+      - name: Remove Azure Artifacts Nuget Source
+        if: always()
+        continue-on-error: true
+        run: |
+          dotnet nuget remove source LugNuGetFeed 
       
       - name: Delete Appsettings files for other environments      
         shell: pwsh
