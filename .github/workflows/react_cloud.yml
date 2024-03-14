@@ -39,8 +39,8 @@ jobs:
     - name: Clear Cache
       run: npm cache clean --force
       
-    - name: Install dependenciesdsfsfsdf
-      run: npm install --legacy-peer-deps
+    - name: Install dependencies
+      run: npm install
       
     - name: Test
       run: npm test
