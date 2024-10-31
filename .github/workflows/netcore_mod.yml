@@ -106,7 +106,7 @@ jobs:
       - name: Deploy
         if: ${{ inputs.DEPLOY_IIS == 'true' }}
         shell: cmd
-        run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="${{ env.DOTNET_ROOT}}/myapp" -dest:contentPath="${{ inputs.SITE_NAME }}",computerName="https://${{ secrets.SERVER_IP }}:${{ secrets.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="${{ secrets.WEBDEPLOY_USER }}",password="${{ secrets.WEBDEPLOY_PASSWORD }}",authtype="Basic" -skip:Directory="docstore"'
+        run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="${{ env.DOTNET_ROOT}}/myapp" -dest:contentPath="${{ inputs.SITE_NAME }}",computerName="https://${{ secrets.SERVER_IP }}:${{ secrets.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="${{ secrets.WEBDEPLOY_USER }}",password="${{ secrets.WEBDEPLOY_PASSWORD }}",authtype="Basic" -skip:Directory="docstore" -skip:Directory="facematches"'
  
       # - name: Start Application Pool
       #   shell: cmd
