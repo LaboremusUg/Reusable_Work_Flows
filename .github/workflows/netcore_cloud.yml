@@ -56,7 +56,7 @@ jobs:
         run: |
           pwd
           ls -R
-          dotnet publish ${{inputs.DIR_NAME}}/${{inputs.PROJECT_NAME}}/${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}/myapp /p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}} 
+          dotnet publish ${{inputs.DIR_NAME}}\${{inputs.PROJECT_NAME}}\${{inputs.PROJECT_NAME}}.csproj --configuration Release -o ${{ env.DOTNET_ROOT}}\myapp \p:EnvironmentName=${{inputs.CLIENT}}${{inputs.CLIENT_ENV}} 
       
  #     - name: Remove Azure Artifacts Nuget Source
  #       if: always()
