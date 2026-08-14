@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-name: Javascript
-=======
 name: Deploy a Javascript application to the Azure cloud.
 
->>>>>>> release/Rename_Javascript_workflow
 on:
   workflow_call:
     inputs:
@@ -26,11 +22,25 @@ on:
         required: true
 
 jobs:
-<<<<<<< HEAD
-  Build-Package-IIS_Deploy:
-=======
+  vulnerability_scan:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read  # Required to checkout and read repo files
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner in repo mode
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: 'fs'
+          format: 'table'
+          # exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'  	
+
   Build-and-Deploy:
->>>>>>> release/Rename_Javascript_workflow
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -40,39 +50,21 @@ jobs:
         node-version: 14.x.x
         #cache: 'npm'
         
-<<<<<<< HEAD
-    - name: Install the latest version of npm
-=======
     - name: Install the latest npm version
->>>>>>> release/Rename_Javascript_workflow
       run: npm install -g npm@latest
       
     - name: Install dependencies
       run: npm install
       
-<<<<<<< HEAD
     - name: Run unit tests
       run: npm test
 
     - name: Build the application
-=======
-    - name: Test
-      run: npm test
-
-    - name: Build
->>>>>>> release/Rename_Javascript_workflow
       run:  npm run build-${{inputs.CLIENT_ENV}}
       env:
         CI: ""
-        
-<<<<<<< HEAD
-    - name: Show content
-      run: dir
-        
+
     - name: Azure Login
-=======
-    - name: Login
->>>>>>> release/Rename_Javascript_workflow
       uses: Azure/login@v1.4.3
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}

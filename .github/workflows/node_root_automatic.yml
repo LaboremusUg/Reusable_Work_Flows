@@ -31,6 +31,24 @@ env:
   NODE_VERSION: '12.x'
 
 jobs:
+  vulnerability_scan:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read  # Required to checkout and read repo files
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner in repo mode
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: 'fs'
+          format: 'table'
+          # exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'  	
+
   build-and-deploy:
 
     runs-on: windows-latest
